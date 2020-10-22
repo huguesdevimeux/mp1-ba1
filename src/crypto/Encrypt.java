@@ -63,28 +63,34 @@ public class Encrypt {
 		return null; // TODO: to be modified
 	}
 	
-	//-----------------------XOR-------------------------
-	
+	// -----------------------XOR-------------------------
+
 	/**
 	 * Method to encode a byte array using a XOR with a single byte long key
-	 * @param plaintext the byte array representing the string to encode
-	 * @param key the byte we will use to XOR
+	 * 
+	 * @param plaintext     the byte array representing the string to encode
+	 * @param key           the byte we will use to XOR
 	 * @param spaceEncoding if false, then spaces are not encoded
 	 * @return an encoded byte array
 	 */
 	public static byte[] xor(byte[] plainText, byte key, boolean spaceEncoding) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		byte[] ciphered = new byte[plainText.length];
+		for (int i = 0; i < plainText.length; i++) {
+			ciphered[i] = (byte) (plainText[i] ^ key);
+		}
+		return ciphered;
+
 	}
+
 	/**
-	 * Method to encode a byte array using a XOR with a single byte long key
-	 * spaces are not encoded
+	 * Method to encode a byte array using a XOR with a single byte long key spaces
+	 * are not encoded
+	 * 
 	 * @param key the byte we will use to XOR
 	 * @return an encoded byte array
 	 */
 	public static byte[] xor(byte[] plainText, byte key) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		return xor(plainText, key, false);
 	}
 	//-----------------------Vigenere-------------------------
 	
