@@ -97,8 +97,6 @@ public class Helper {
 		File file = new File(RES_PATH_HEADER + fileName);
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(file));
-		  BufferedReader br = new BufferedReader(new FileReader(file)); 
-			BufferedReader br = new BufferedReader(new FileReader(file));
 
 			String temp;
 			boolean checkFirst = false;
@@ -120,6 +118,17 @@ public class Helper {
 		return string;
 
 	}
-	
-	
+
+	public static String bytesToBinaryRepr(byte[] bytes) {
+		String result = "";
+		for (byte el : bytes) {
+			result += Integer.toBinaryString((el & 0xFF) + 0x100).substring(1);
+		}
+		return result;
+	}
+
+	public static String byteToBinaryRepr(byte byteToRepr) {
+		return bytesToBinaryRepr(new byte[] { byteToRepr });
+	}
+
 }
