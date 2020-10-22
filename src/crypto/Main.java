@@ -13,6 +13,8 @@ import static crypto.Helper.bytesToString;
 public class Main {
 
 	// ---------------------------MAIN---------------------------
+
+	// SEXE
 	public static void main(String args[]) {
 
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
