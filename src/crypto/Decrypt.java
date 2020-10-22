@@ -1,13 +1,6 @@
 package crypto;
 
-import static crypto.Helper.bytesToString;
-import static crypto.Helper.stringToBytes;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Decrypt {
 	
@@ -29,7 +22,7 @@ public class Decrypt {
 		return null; //TODO: to be modified
 	}
 	
-	
+	// hello my name is bite
 	/**
 	 * Converts a 2D byte array to a String
 	 * @param bruteForceResult a 2D byte array containing the result of a brute force method
