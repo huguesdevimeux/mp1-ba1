@@ -2,4 +2,4 @@
 
 This repository contains the mini-project realized during first year bachelor at the EPFL. 
 
-Hugues Devimeux/Lucas Mouchel 10/2020
+Hugues Devimeux/Luca Mouchel 10/2020
