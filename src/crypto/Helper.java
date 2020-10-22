@@ -119,6 +119,12 @@ public class Helper {
 
 	}
 
+	/***
+	 * Convert a list of byte into it's string representation in binary.
+	 * 
+	 * @param bytes
+	 * @return a String corresponding to the byte array converted.
+	 */
 	public static String bytesToBinaryRepr(byte[] bytes) {
 		String result = "";
 		for (byte el : bytes) {
