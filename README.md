@@ -4,5 +4,4 @@ This repository contains the mini-project realized during first year bachelor at
 
 Paper : https://proginsc.epfl.ch/wwwhiver/mini-projet1/crypto.pdf
 Descriptive : https://proginsc.epfl.ch/wwwhiver/mini-projet1/descriptif.html
-
-Hugues Devimeux/Lucas Mouchel 10/2020
+Hugues Devimeux/Luca Mouchel 10/2020
