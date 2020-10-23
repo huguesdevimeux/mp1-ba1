@@ -1,8 +1,8 @@
 package crypto;
 
+import static crypto.Helper.bytesToString;
 import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
-import static crypto.Helper.bytesToString;
 
 /*
  * Part 1: Encode (with note that one can reuse the functions to decode)
@@ -24,7 +24,9 @@ public class Main {
 
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
-
+		System.out.println(messageBytes);
+		
+		
 		System.out.println("Original input sanitized : " + messageClean);
 		System.out.println();
 

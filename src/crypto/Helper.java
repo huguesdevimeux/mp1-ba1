@@ -40,7 +40,7 @@ public class Helper {
 	
 	
 	/**
-	 * Method turning a byte array into a String
+	 * Method turning a bygte array into a String
 	 * @param numbers the byte array
 	 * @return a String corresponding to the byte array
 	 */

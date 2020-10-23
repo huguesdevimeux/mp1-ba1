@@ -1,7 +1,6 @@
 package crypto;
 
 import java.util.Random;
-import static crypto.Helper.*;
 
 public class Encrypt {
 	
@@ -14,6 +13,9 @@ public class Encrypt {
 	public static final byte SPACE = 32;
 	
 	final static Random rand = new Random();
+	
+	
+
 	
 	//-----------------------General-------------------------
 	
@@ -38,16 +40,32 @@ public class Encrypt {
 	/**
 	 * Method to encode a byte array message using a single character key
 	 * the key is simply added to each byte of the original message
-	 * @param plainText The byte array representing the string to encode
+	 * @param plainText The byte array representing the string to encode 
 	 * @param key the byte corresponding to the char we use to shift
 	 * @param spaceEncoding if false, then spaces are not encoded
 	 * @return an encoded byte array
 	 */
 	public static byte[] caesar(byte[] plainText, byte key, boolean spaceEncoding) {
 		assert(plainText != null);
-		// TODO: COMPLETE THIS METHOD
 		
-		return null; // TODO: to be modified
+		for(int i = 0; i < plainText.length; ++i) {
+			
+			if(spaceEncoding == false) {
+			if(plainText[i] != 32) {	
+			plainText[i] += (byte) key;				//jsp si mettre (byte) a chaque fois ou si ca suffit de le mettre sur la derniere ligne 
+			if(plainText[i] >= 128) {
+				plainText[i] -= (byte) 256; // -2*128
+			}
+		}	
+	}else{
+		plainText[i] += (byte) key;
+		if(plainText[i] >= 128) {
+			plainText[i] -= (byte) 256; 
+		}
+	}
+}
+		String message = Helper.bytesToString(plainText);	
+		return plainText; 
 	}
 	
 	/**
@@ -59,9 +77,31 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] caesar(byte[] plainText, byte key) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		return caesar(plainText, key, false);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	//-----------------------XOR-------------------------
 	
