@@ -4,6 +4,8 @@ import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
 import static crypto.Helper.bytesToString;
 
+import java.util.Arrays;
+
 /*
  * Part 1: Encode (with note that one can reuse the functions to decode)
  * Part 2: bruteForceDecode (caesar, xor) and CBCDecode
