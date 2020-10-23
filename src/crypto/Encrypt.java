@@ -69,7 +69,6 @@ public class Encrypt {
 				}
 			}
 		}
-		String message = Helper.bytesToString(plainText);
 		return plainText;
 	}
 
