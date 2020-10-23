@@ -1,8 +1,8 @@
 package crypto;
 
+import static crypto.Helper.bytesToString;
 import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
-import static crypto.Helper.bytesToString;
 
 import java.util.Arrays;
 
@@ -15,6 +15,8 @@ import java.util.Arrays;
 public class Main {
 
 	// ---------------------------MAIN---------------------------
+
+	
 	public static void main(String args[]) {
 
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
@@ -24,7 +26,7 @@ public class Main {
 
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
-
+		
 		System.out.println("Original input sanitized : " + messageClean);
 		System.out.println();
 

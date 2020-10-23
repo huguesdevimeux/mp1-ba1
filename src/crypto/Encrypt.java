@@ -51,9 +51,26 @@ public class Encrypt {
 	 */
 	public static byte[] caesar(byte[] plainText, byte key, boolean spaceEncoding) {
 		assert (plainText != null);
-		// TODO: COMPLETE THIS METHOD
+		for (int i = 0; i < plainText.length; ++i) {
 
-		return null; // TODO: to be modified
+			if (spaceEncoding == false) {
+				if (plainText[i] != 32) {
+					// jsp si mettre (byte) a chaque fois ou si ca suffit de le mettre sur
+					// la derniere ligne
+					plainText[i] += (byte) key;
+					if (plainText[i] >= 128) {
+						plainText[i] -= (byte) 256; // -2*128
+					}
+				}
+			} else {
+				plainText[i] += (byte) key;
+				if (plainText[i] >= 128) {
+					plainText[i] -= (byte) 256;
+				}
+			}
+		}
+		String message = Helper.bytesToString(plainText);
+		return plainText;
 	}
 
 	/**
@@ -65,8 +82,7 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] caesar(byte[] plainText, byte key) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		return caesar(plainText, key, false);
 	}
 
 	// -----------------------XOR-------------------------
