@@ -14,7 +14,7 @@ public class Main {
 
 	// ---------------------------MAIN---------------------------
 
-	// SEXE
+	
 	public static void main(String args[]) {
 
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
@@ -24,8 +24,6 @@ public class Main {
 
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
-		System.out.println(messageBytes);
-		
 		
 		System.out.println("Original input sanitized : " + messageClean);
 		System.out.println();
