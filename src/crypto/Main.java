@@ -4,6 +4,8 @@ import static crypto.Helper.bytesToString;
 import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
 
+import java.util.Arrays;
+
 /*
  * Part 1: Encode (with note that one can reuse the functions to decode)
  * Part 2: bruteForceDecode (caesar, xor) and CBCDecode
@@ -56,6 +58,21 @@ public class Main {
 		System.out.println("Decoded without knowing the key : " + sFD);
 	}
 
+	public static void testXor(byte[] textBytes, byte key) {
+		// Test symetry
+		byte[] result = Encrypt.xor(textBytes, key);
+		result = Encrypt.xor(result, key);
+		assert (Arrays.equals(result, textBytes));
+
+		// Test spaces disabled
+		assert (Arrays.equals(Encrypt.xor(new byte[] { 32 }, (byte) 4), new byte[] { 32 }));
+
+		// test spaces enabled :
+		assert (Arrays.equals(Encrypt.xor(new byte[] { 32 }, (byte) 6, true), new byte[] { 38 }));
+		// TODO : Implementing other test space related.
+
+		System.out.println("XOR tested successfully.");
+	}
 	// TODO : TO BE COMPLETED
 
 }

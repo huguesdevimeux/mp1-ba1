@@ -2,6 +2,10 @@ package crypto;
 
 import java.util.Random;
 
+import java.lang.Math; // TODO Allowed ? 
+
+import static crypto.Helper.*;
+
 public class Encrypt {
 
 	public static final int CAESAR = 0;
@@ -47,7 +51,6 @@ public class Encrypt {
 	 */
 	public static byte[] caesar(byte[] plainText, byte key, boolean spaceEncoding) {
 		assert (plainText != null);
-
 		for (int i = 0; i < plainText.length; ++i) {
 
 			if (spaceEncoding == false) {
@@ -93,8 +96,18 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] xor(byte[] plainText, byte key, boolean spaceEncoding) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		assert plainText.length > 0;
+		// TODO ; Implement check for empty key ?
+		byte[] ciphered = new byte[plainText.length];
+		for (int i = 0; i < plainText.length; i++) {
+			if (!(spaceEncoding) && plainText[i] == 32) {
+				ciphered[i] = (byte) 32;
+			} else {
+				ciphered[i] = (byte) (plainText[i] ^ key);
+			}
+		}
+		return ciphered;
+
 	}
 
 	/**
@@ -105,8 +118,7 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] xor(byte[] plainText, byte key) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		return xor(plainText, key, false);
 	}
 	// -----------------------Vigenere-------------------------
 
