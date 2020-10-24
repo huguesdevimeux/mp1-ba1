@@ -4,6 +4,7 @@ import static crypto.Helper.bytesToString;
 import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /*
@@ -39,15 +40,44 @@ public class Main {
 
 	// Run the Encoding and Decoding using the caesar pattern
 	public static void testCaesar(byte[] string, byte key) {
-		// Encoding
+		
 		byte[] result = Encrypt.caesar(string, key);
-		String s = bytesToString(result);
-		System.out.println("Encoded : " + s);
+			/*
+			 * METHODE HUGUES
+			 * 
+			 * byte[] result = Encrypt.caesar(string, key); result =
+			 * Encrypt.caesar(result,key); assert (Arrays.equals(result, string));
+			 * 
+			 * assert (Arrays.equals(Encrypt.caesar(new byte[] { 32 }, (byte) 4), new byte[]
+			 * { 32 }));
+			 * 
+			 * assert (Arrays.equals(Encrypt.caesar(new byte[] { 32 }, (byte) 6, true), new
+			 * byte[] { 38 })); }
+			 * 
+			 */
+			String plainText = "bonne journée";
+			byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
+			
+			byte[] encrypt1 = Encrypt.caesar(plainBytes, (byte) 3);
+			String cipherText = Helper.bytesToString(encrypt1);
+			assert (cipherText.equals("erqqh mrxuqìh"));
+			
+			
+			byte[] encrypt2 = Encrypt.caesar(plainBytes, (byte) 3, true);
+			String cipherText1 = Helper.bytesToString(encrypt2);
+			// Test Caesar with spaces
+			assert (cipherText1.equals("erqqh#mrxuqìh"));
+			
+			
+			System.out.println("Caesar tested successfully.");
 
-		// Decoding with key
-		String sD = bytesToString(Encrypt.caesar(result, (byte) (-key)));
-		System.out.println("Decoded knowing the key : " + sD);
-
+			/*
+			 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
+			 * (-key))); System.out.println("Decoded knowing the key : " + sD);
+			 */
+			
+			//fait au dessus non??
+		
 		// Decoding without key
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
 		String sDA = Decrypt.arrayToString(bruteForceResult);

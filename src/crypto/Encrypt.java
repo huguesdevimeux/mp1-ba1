@@ -2,10 +2,6 @@ package crypto;
 
 import java.util.Random;
 
-import java.lang.Math; // TODO Allowed ? 
-
-import static crypto.Helper.*;
-
 public class Encrypt {
 
 	public static final int CAESAR = 0;
@@ -18,6 +14,18 @@ public class Encrypt {
 
 	final static Random rand = new Random();
 
+	
+	
+	
+	public static void main(String[] args) {
+		byte [] plainText = {105, 32, 119, 115, 120};
+		byte key = 10;
+		byte [] cypherText = caesar(plainText, key);					//////TODO ATTENTION A BIEN ENLEVER -- ajouté fonction main pour tester les bails
+	
+		for(int val : cypherText) {
+			System.out.print(val + ", ");
+		}
+	}
 	// -----------------------General-------------------------
 
 	/**
@@ -51,25 +59,28 @@ public class Encrypt {
 	 */
 	public static byte[] caesar(byte[] plainText, byte key, boolean spaceEncoding) {
 		assert (plainText != null);
+
+		byte[] ciphered = new byte[plainText.length];
 		for (int i = 0; i < plainText.length; ++i) {
 
+			ciphered[i] = plainText[i];
+
 			if (spaceEncoding == false) {
-				if (plainText[i] != 32) {
-					// jsp si mettre (byte) a chaque fois ou si ca suffit de le mettre sur
-					// la derniere ligne
-					plainText[i] += (byte) key;
-					if (plainText[i] >= 128) {
-						plainText[i] -= (byte) 256; // -2*128
+
+				if (ciphered[i] != 32) {
+					ciphered[i] += (byte) key;
+					if (ciphered[i] >= 128) {
+						ciphered[i] %= (byte) 128;
 					}
 				}
 			} else {
-				plainText[i] += (byte) key;
-				if (plainText[i] >= 128) {
-					plainText[i] -= (byte) 256;
+				ciphered[i] += (byte) key;
+				if (ciphered[i] >= 128) {
+					ciphered[i] %= (byte) 128;
 				}
 			}
 		}
-		return plainText;
+		return ciphered;
 	}
 
 	/**
@@ -133,8 +144,42 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] vigenere(byte[] plainText, byte[] keyword, boolean spaceEncoding) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		assert (plainText != null);
+
+		// on est daccord sur cette assert?
+		assert (keyword.length > 0 && keyword.length <= plainText.length);
+
+		byte[] ciphered = new byte[plainText.length];
+
+		for (int i = 0; i < plainText.length; ++i) {
+			ciphered[i] = plainText[i];
+
+			if (spaceEncoding == false) {
+
+				if (ciphered[i] != 32) {
+
+					for (int j = 0; j < keyword.length; ++j) {
+						if (i == j) {
+							if (i == 32) {
+
+								ciphered[i + 1] += keyword[j];
+							} else {
+								ciphered[i] += keyword[j];
+							}
+						} else if (i > j) {
+
+						}
+					}
+					if (ciphered[i] >= 128) {
+						ciphered[i] -= 256;
+					}
+
+				}
+
+			}
+
+		}	
+		return ciphered; // TODO: to be modified
 	}
 
 	/**
