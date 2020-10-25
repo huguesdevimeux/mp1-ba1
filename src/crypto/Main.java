@@ -6,6 +6,7 @@ import static crypto.Helper.stringToBytes;
 
 import java.util.Arrays;
 
+
 /*
  * Part 1: Encode (with note that one can reuse the functions to decode)
  * Part 2: bruteForceDecode (caesar, xor) and CBCDecode
@@ -18,7 +19,6 @@ public class Main {
 
 	
 	public static void main(String args[]) {
-
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
 		String key = "2cF%5";
 
@@ -27,14 +27,20 @@ public class Main {
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
 		
-		System.out.println("Original input sanitized : " + messageClean);
-		System.out.println();
+		// System.out.println("Original input sanitized : " + messageClean);
+		// System.out.println();
 
 		System.out.println("------Caesar------");
-		testCaesar(messageBytes, keyBytes[0]);
+		// testCaesar(messageBytes, keyBytes[0]);
 
-		// TODO: TO BE COMPLETED
+		System.out.println("------XOR-------");
+		testXor(messageBytes, keyBytes[0]);
 
+		System.out.println("------OTP-------");
+		testOTP();
+
+		System.out.println("------CBC-------");
+		testCBC(messageBytes, keyBytes);
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern
@@ -51,7 +57,7 @@ public class Main {
 		// Decoding without key
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
-		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
+		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
 
 		byte decodingKey = Decrypt.caesarWithFrequencies(result);
 		String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
@@ -69,10 +75,33 @@ public class Main {
 
 		// test spaces enabled :
 		assert (Arrays.equals(Encrypt.xor(new byte[] { 32 }, (byte) 6, true), new byte[] { 38 }));
-		// TODO : Implementing other test space related.
+
+		byte[] message = stringToBytes("helloworld");
+		// This control data has been generated with an external Xor cipher. 
+		byte[] controlData = { 108, 97, 104, 104, 107, 115, 107, 118, 104, 96 };
+		byte[] ciphered = Encrypt.xor(message, (byte) 4);
+		assert Arrays.equals(ciphered, controlData);
 
 		System.out.println("XOR tested successfully.");
 	}
-	// TODO : TO BE COMPLETED
+
+	public static void testOTP()
+	{
+		byte[] pad = stringToBytes("allonsenfants");
+		byte[] message = stringToBytes("helloworld");
+
+		// Test symetry
+		byte[] ciphered = Encrypt.oneTimePad(message, pad);
+		byte[] cipheredBack = Encrypt.oneTimePad(ciphered, pad);
+		assert Arrays.equals(message, cipheredBack);
+		
+		// TODO implement other tests 
+		System.out.println("OTP tested successfully.");
+	}
+
+	public static void testCBC(byte[] textBytes, byte[] pad){
+		Encrypt.cbc(textBytes, pad); 
+		// TODO Implement good tests for this ?
+	}
 
 }
