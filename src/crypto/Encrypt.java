@@ -1,6 +1,9 @@
 package crypto;
 
+import java.util.Arrays;
 import java.util.Random;
+import static crypto.Helper.*;
+
 
 public class Encrypt {
 
@@ -14,16 +17,7 @@ public class Encrypt {
 
 	final static Random rand = new Random();
 
-	public static void main(String[] args) {
-		byte[] plainText = {};
-		byte[] key = {1,2,3};
-		byte[] cypherText = vigenere(plainText, key, false); ////// TODO ATTENTION A BIEN ENLEVER -- ajouté fonction
-																////// main pour tester les bails
-		for(int i : cypherText) {
-			System.out.print(i + " ");
-		}
-	}
-	
+
 	// -----------------------General-------------------------
 
 	/**
@@ -64,6 +58,8 @@ public class Encrypt {
 			//copying elements of plainText in ciphered to not interfere with reference
 			ciphered[i] = plainText[i];
 
+			ciphered[i] = plainText[i];
+
 			if (spaceEncoding == false) {
 
 				if (ciphered[i] != 32) {
@@ -74,7 +70,6 @@ public class Encrypt {
 
 			}
 		}
-
 		return ciphered;
 	}
 
@@ -144,6 +139,7 @@ public class Encrypt {
 
 		byte[] ciphered = new byte[plainText.length];
 
+
 		int keywordArray_index = 0;
 		// copy the elements of plainText to not interfere with references
 		for (int i = 0; i < plainText.length; ++i) {
@@ -178,15 +174,21 @@ public class Encrypt {
 
 	/**
 	 * Method to encode a byte array using a one time pad of the same length. The
-	 * method XOR them together.
+	 * method XOR them together. Spaces are by default encoded. 
+	 * The pad length must be equal or longer than the message. 
 	 * 
 	 * @param plainText the byte array representing the string to encode
 	 * @param pad       the one time pad
 	 * @return an encoded byte array
 	 */
 	public static byte[] oneTimePad(byte[] plainText, byte[] pad) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		assert (pad.length >= plainText.length);
+		
+		byte[] ciphered = new byte[plainText.length];
+		for (int i = 0; i < plainText.length; i++) {
+			ciphered[i] = (byte) (plainText[i] ^ pad[i]);
+		}
+		return ciphered;
 	}
 
 	// -----------------------Basic CBC-------------------------
@@ -194,15 +196,39 @@ public class Encrypt {
 	/**
 	 * Method applying a basic chain block counter of XOR without encryption method.
 	 * Encodes spaces.
+	 * Important note : This method is not symetric ! 
 	 * 
 	 * @param plainText the byte array representing the string to encode
 	 * @param iv        the pad of size BLOCKSIZE we use to start the chain encoding
 	 * @return an encoded byte array
 	 */
 	public static byte[] cbc(byte[] plainText, byte[] iv) {
-		// TODO: COMPLETE THIS METHOD
-
-		return null; // TODO: to be modified
+		
+		byte[] ciphered = new byte[plainText.length];
+		// We copy it to avoid any reference related problem. 
+		byte[] temp_pad = iv.clone(); 
+		int lengthBlock = iv.length;	
+		byte[] blockCipheredTemp = new byte[lengthBlock];
+		int shift = lengthBlock; 
+		for (int i = 0; i < plainText.length; i += lengthBlock) {
+			// Arrays.copyOfRange fill up with zeros the array given as parameters, if the upper bound is greater than the size of the array. 
+			// As zero would be processed by the ciphers functions as a normal elements, we want to avoid this and reduce the size of t
+			// the array so there won't be any additional zero. 
+			if ((i + lengthBlock) > plainText.length) {
+				shift = plainText.length - i;
+			}
+			byte[] sliced = Arrays.copyOfRange(plainText, i, i + shift);
+			
+			blockCipheredTemp = oneTimePad(sliced, temp_pad);
+			// Initialize the pad for the next iteration. 
+			temp_pad = blockCipheredTemp.clone();
+			// this aims to add append every element of the block ciphered to ciphered. 
+			for (int j = 0; j < shift; j++) {
+				int indexCiphered = i + j;
+				ciphered[indexCiphered] = blockCipheredTemp[j];
+			}
+		}
+		return ciphered;
 	}
 
 	/**
@@ -212,9 +238,13 @@ public class Encrypt {
 	 * @return random bytes in an array
 	 */
 	public static byte[] generatePad(int size) {
-		// TODO: COMPLETE THIS METHOD
+		assert (size > 0); 
+		byte[] result = new byte[size];
+		for (int i = 0; i < size; i++) {
+				result[i] = (byte) rand.nextInt(256); 
+		}
 
-		return null; // TODO: to be modified
+		return result;
 
 	}
 
