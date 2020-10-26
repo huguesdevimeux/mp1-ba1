@@ -130,7 +130,13 @@ public class Main {
 	}
 
 	public static void testCBC(byte[] textBytes, byte[] pad){
-		Encrypt.cbc(textBytes, pad); 
+		byte[] resultTemp = Encrypt.cbc(textBytes, pad);
+		resultTemp = Decrypt.decryptCBC(resultTemp, pad);
+		
+		// Test symetry 
+		assert (Arrays.equals(textBytes, resultTemp));
+		System.out.println("CBC tested successfully.");
+
 		// TODO Implement good tests for this ?
 	}
 

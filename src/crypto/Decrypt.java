@@ -159,8 +159,7 @@ public class Decrypt {
 	 * @return the clear text
 	 */
 	public static byte[] decryptCBC(byte[] cipher, byte[] iv) {
-		//TODO : COMPLETE THIS METHOD	
-		return null; //TODO: to be modified
+		return Encrypt.cbcInternal(cipher, iv, true);
 	}
 	
 	
