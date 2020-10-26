@@ -28,11 +28,16 @@ public class Main {
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
 		
-		// System.out.println("Original input sanitized : " + messageClean);
+
+    // System.out.println("Original input sanitized : " + messageClean);
 		// System.out.println();
+
 
 		System.out.println("------Caesar------");
 		// testCaesar(messageBytes, keyBytes[0]);
+    
+    System.out.println("------Vigenere------");
+		testVigenere(messageBytes, keyBytes);
 
 		System.out.println("------XOR-------");
 		testXor(messageBytes, keyBytes[0]);
@@ -42,57 +47,59 @@ public class Main {
 
 		System.out.println("------CBC-------");
 		testCBC(messageBytes, keyBytes);
+
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern
 	public static void testCaesar(byte[] string, byte key) {
 		
 		byte[] result = Encrypt.caesar(string, key);
-			/*
-			 * METHODE HUGUES
-			 * 
-			 * byte[] result = Encrypt.caesar(string, key); result =
-			 * Encrypt.caesar(result,key); assert (Arrays.equals(result, string));
-			 * 
-			 * assert (Arrays.equals(Encrypt.caesar(new byte[] { 32 }, (byte) 4), new byte[]
-			 * { 32 }));
-			 * 
-			 * assert (Arrays.equals(Encrypt.caesar(new byte[] { 32 }, (byte) 6, true), new
-			 * byte[] { 38 })); }
-			 * 
-			 */
-			String plainText = "bonne journée";
-			byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
+		String plainText = "bonne journée";
+		byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
 			
-			byte[] encrypt1 = Encrypt.caesar(plainBytes, (byte) 3);
-			String cipherText = Helper.bytesToString(encrypt1);
-			assert (cipherText.equals("erqqh mrxuqìh"));
+		byte[] encrypt1 = Encrypt.caesar(plainBytes, (byte) 3);
+		String cipherText = Helper.bytesToString(encrypt1);
+		assert (cipherText.equals("erqqh mrxuqìh"));
 			
 			
-			byte[] encrypt2 = Encrypt.caesar(plainBytes, (byte) 3, true);
-			String cipherText1 = Helper.bytesToString(encrypt2);
-			// Test Caesar with spaces
-			assert (cipherText1.equals("erqqh#mrxuqìh"));
-			
-			
-			System.out.println("Caesar tested successfully.");
+		byte[] encrypt2 = Encrypt.caesar(plainBytes, (byte) 3, true);
+		String cipherText1 = Helper.bytesToString(encrypt2);
+		// Test Caesar with spaces	
+    assert (cipherText1.equals("erqqh#mrxuqìh"));
+		
+		System.out.println("Caesar tested successfully.");
 
 			/*
 			 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
 			 * (-key))); System.out.println("Decoded knowing the key : " + sD);
 			 */
 			
-			//fait au dessus non??
+	
 		
 		// Decoding without key
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
 
-		byte decodingKey = Decrypt.caesarWithFrequencies(result);
-		String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
-		System.out.println("Decoded without knowing the key : " + sFD);
-	}
+
+		System.out.println("Caesar tested successfully.");
+
+		/*
+		 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
+		 * (-key))); System.out.println("Decoded knowing the key : " + sD);
+		 */
+		
+		//fait au dessus non??
+	
+	// Decoding without key
+	byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
+	String sDA = Decrypt.arrayToString(bruteForceResult);
+	// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
+
+	byte decodingKey = Decrypt.caesarWithFrequencies(result);
+	String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
+//	System.out.println("Decoded without knowing the key : " + sFD);
+}
 
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
@@ -134,4 +141,27 @@ public class Main {
 		// TODO Implement good tests for this ?
 	}
 
+
+
+	public static void testVigenere(byte[] string, byte[] key) {
+
+		byte[] result = Encrypt.vigenere(string, key);
+		String plainText = "bonne journée";
+		byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
+
+		// creating array of keys used in example
+		byte[] keys = { 1, 2, 3 };
+
+		// encrypting without encoding spaces(spaceEncoding (boolean parameter of vigenere) considered false)
+		byte[] cipherBytes1 = Encrypt.vigenere(plainBytes, keys, false);
+		String cipherText1 = Helper.bytesToString(cipherBytes1);
+		assert (cipherText1.equals("cqqog mpwuoëh"));
+
+		// encrypting and encoding spaces(spaceEncoding considered as True)
+		byte[] cipherBytes2 = Encrypt.vigenere(plainBytes, keys, true);
+		String cipherText2 = Helper.bytesToString(cipherBytes2);
+		assert (cipherText2.equals("cqqog#kqxspìf"));
+
+		System.out.println("Vigenere tested successfully");
+	}
 }

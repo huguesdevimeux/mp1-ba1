@@ -2,9 +2,8 @@ package crypto;
 
 import java.util.Arrays;
 import java.util.Random;
-
-
 import static crypto.Helper.*;
+
 
 public class Encrypt {
 
@@ -18,18 +17,7 @@ public class Encrypt {
 
 	final static Random rand = new Random();
 
-	
-	
-	
-	public static void main(String[] args) {
-		byte [] plainText = {105, 32, 119, 115, 120};
-		byte key = 10;
-		byte [] cypherText = caesar(plainText, key);					//////TODO ATTENTION A BIEN ENLEVER -- ajouté fonction main pour tester les bails
-	
-		for(int val : cypherText) {
-			System.out.print(val + ", ");
-		}
-	}
+
 	// -----------------------General-------------------------
 
 	/**
@@ -66,6 +54,9 @@ public class Encrypt {
 
 		byte[] ciphered = new byte[plainText.length];
 		for (int i = 0; i < plainText.length; ++i) {
+			
+			//copying elements of plainText in ciphered to not interfere with reference
+			ciphered[i] = plainText[i];
 
 			ciphered[i] = plainText[i];
 
@@ -73,15 +64,10 @@ public class Encrypt {
 
 				if (ciphered[i] != 32) {
 					ciphered[i] += (byte) key;
-					if (ciphered[i] >= 128) {
-						ciphered[i] %= (byte) 128;
-					}
 				}
 			} else {
 				ciphered[i] += (byte) key;
-				if (ciphered[i] >= 128) {
-					ciphered[i] %= (byte) 128;
-				}
+
 			}
 		}
 		return ciphered;
@@ -149,43 +135,27 @@ public class Encrypt {
 	 */
 	public static byte[] vigenere(byte[] plainText, byte[] keyword, boolean spaceEncoding) {
 		assert (plainText != null);
-
-		// on est daccord sur cette assert?
 		assert (keyword.length > 0 && keyword.length <= plainText.length);
 
 		byte[] ciphered = new byte[plainText.length];
 
+
+		int keywordArray_index = 0;
+		// copy the elements of plainText to not interfere with references
 		for (int i = 0; i < plainText.length; ++i) {
-			ciphered[i] = plainText[i];
 
-			if (spaceEncoding == false) {
-
-				if (ciphered[i] != 32) {
-
-					for (int j = 0; j < keyword.length; ++j) {
-						if (i == j) {
-							if (i == 32) {
-
-								ciphered[i + 1] += keyword[j];
-							} else {
-								ciphered[i] += keyword[j];
-							}
-						} else if (i > j) {
-
-						}
-					}
-					if (ciphered[i] >= 128) {
-						ciphered[i] -= 256;
-					}
-
-				}
-
+			if (!spaceEncoding && plainText[i] == 32) {
+				ciphered[i] = plainText[i];
+			} else {
+				ciphered[i] = (byte) (plainText[i] + keyword[keywordArray_index % keyword.length]);
+				++keywordArray_index;
 			}
+		}
 
-		}	
 		return ciphered; // TODO: to be modified
 	}
-
+	
+	
 	/**
 	 * Method to encode a byte array using a byte array keyword The keyword is
 	 * repeated along the message to encode spaces are not encoded The bytes of the
@@ -197,8 +167,7 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] vigenere(byte[] plainText, byte[] keyword) {
-		// TODO: COMPLETE THIS METHOD
-		return null; // TODO: to be modified
+		return vigenere(plainText, keyword, false);
 	}
 
 	// -----------------------One Time Pad-------------------------
