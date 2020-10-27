@@ -91,14 +91,16 @@ public class Main {
 		
 		//fait au dessus non??
 	
-	// Decoding without key
-	byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
-	String sDA = Decrypt.arrayToString(bruteForceResult);
+		// Decoding without key
+		byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
+		String sDA = Decrypt.arrayToString(bruteForceResult);
+		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
 	// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
+		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
 
-	byte decodingKey = Decrypt.caesarWithFrequencies(result);
-	String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
-//	System.out.println("Decoded without knowing the key : " + sFD);
+		byte decodingKey = Decrypt.caesarWithFrequencies(result);
+		String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
+		//	System.out.println("Decoded without knowing the key : " + sFD);
 }
 
 	public static void testXor(byte[] textBytes, byte key) {
