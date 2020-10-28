@@ -27,23 +27,22 @@ public class Main {
 
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
-		
 
     // System.out.println("Original input sanitized : " + messageClean);
 		// System.out.println();
 
 
 		System.out.println("------Caesar------");
-		// testCaesar(messageBytes, keyBytes[0]);
+		testCaesar(messageBytes, keyBytes[0]);
     
-    System.out.println("------Vigenere------");
+		System.out.println("------Vigenere------");	
 		testVigenere(messageBytes, keyBytes);
 
 		System.out.println("------XOR-------");
 		testXor(messageBytes, keyBytes[0]);
 
 		System.out.println("------OTP-------");
-		testOTP();
+		testOTP(); // TODO : make it input dependent ! 
 
 		System.out.println("------CBC-------");
 		testCBC(messageBytes, keyBytes);
@@ -53,7 +52,7 @@ public class Main {
 	// Run the Encoding and Decoding using the caesar pattern
 	public static void testCaesar(byte[] string, byte key) {
 		
-		byte[] result = Encrypt.caesar(string, key);
+		byte[] result = Encrypt.caesar(string, key); // TODO UNUSED
 		String plainText = "bonne journée";
 		byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
 			
@@ -65,42 +64,50 @@ public class Main {
 		byte[] encrypt2 = Encrypt.caesar(plainBytes, (byte) 3, true);
 		String cipherText1 = Helper.bytesToString(encrypt2);
 		// Test Caesar with spaces	
-    assert (cipherText1.equals("erqqh#mrxuqìh"));
+    	assert (cipherText1.equals("erqqh#mrxuqìh"));
 		
 		System.out.println("Caesar tested successfully.");
+		
+		// TODO HERE : Test bruteforce
 
-			/*
-			 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
-			 * (-key))); System.out.println("Decoded knowing the key : " + sD);
-			 */
+		byte[] encryptedMessage = Encrypt.caesar(string, key);
+		float[] frequencies = Decrypt.computeFrequencies(encryptedMessage);
+		byte guessedKey = Decrypt.caesarFindKey(frequencies); 
+		assert (key == guessedKey); 
+		
+		System.out.println("Caesar Cryptanalysis tested successfully.");
+
+		//-----PART BELOW IS CRAP. 
+
+		// 	/*
+		// 	 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
+		// 	 * (-key))); System.out.println("Decoded knowing the key : " + sD);
+		// 	 */
 			
 	
 		
-		// Decoding without key
-		byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
-		String sDA = Decrypt.arrayToString(bruteForceResult);
-		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
+		// // Decoding without key
+		// byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
+		// String sDA = Decrypt.arrayToString(bruteForceResult);
+		// // Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
 
+		// System.out.println("Caesar tested successfully.");
 
-		System.out.println("Caesar tested successfully.");
-
-		/*
-		 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
-		 * (-key))); System.out.println("Decoded knowing the key : " + sD);
-		 */
+		// /*
+		//  * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
+		//  * (-key))); System.out.println("Decoded knowing the key : " + sD);
+		//  */
 		
-		//fait au dessus non??
+		// //fait au dessus non??
 	
-		// Decoding without key
-		byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
-		String sDA = Decrypt.arrayToString(bruteForceResult);
-		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
-	// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
-		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
+		// // Decoding without key
+		// // byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
+		// // String sDA = Decrypt.arrayToString(bruteForceResult);
+		// // Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
 
-		byte decodingKey = Decrypt.caesarWithFrequencies(result);
-		String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
-		//	System.out.println("Decoded without knowing the key : " + sFD);
+		// byte decodingKey = Decrypt.caesarWithFrequencies(result);
+		// String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
+		// //	System.out.println("Decoded without knowing the key : " + sFD);
 }
 
 	public static void testXor(byte[] textBytes, byte key) {
