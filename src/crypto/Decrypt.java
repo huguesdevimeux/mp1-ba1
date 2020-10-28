@@ -66,8 +66,22 @@ public class Decrypt {
 	 * @return the character frequencies as an array of float
 	 */
 	public static float[] computeFrequencies(byte[] cipherText) {
-		//TODO : COMPLETE THIS METHOD
-		return null; //TODO: to be modified
+		float[] frequencies = new float[ALPHABETSIZE];
+		int numberCharNotSpace = 0; 
+		for (byte charTemp : cipherText) {
+
+			// We have to skip the spaces, which does not make any sen .. well, we have to 
+			if (charTemp != 32) {
+				numberCharNotSpace += 1;
+				// The index is charTemp shifted by 126, as index are only positives integrers
+				// and bytes casted to int are from -128 to 127. 
+				frequencies[charTemp + 128] += 1.0;
+			}
+		}
+		for (int i = 0; i < frequencies.length; i++) {
+			frequencies[i] /= numberCharNotSpace;
+		}
+		return frequencies;
 	}
 	
 	
