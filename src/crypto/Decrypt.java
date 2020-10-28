@@ -91,8 +91,27 @@ public class Decrypt {
 	 * @return the key
 	 */
 	public static byte caesarFindKey(float[] charFrequencies) {
-		//TODO : COMPLETE THIS METHOD
-		return -1; //TODO: to be modified
+		assert (charFrequencies.length == 256);
+		double dotProductTemp = 0;
+		// initialized to -in so "is greatest" comparison will return false, for the first iteration.
+		double maxDotProductTemp = Double.NEGATIVE_INFINITY;
+		int indexMax = -1;
+
+		for (int index = 0; index < charFrequencies.length; index++) {
+
+			// Compute the dot product
+			for (int j = 0; j < ENGLISHFREQUENCIES.length; j++) {
+				// The module handles the warp-around (if the index is greater than the size of charFrequency, then we come back to the beginning)
+				dotProductTemp += ENGLISHFREQUENCIES[j] * charFrequencies[(index + j) % charFrequencies.length];
+			}
+			if (dotProductTemp > maxDotProductTemp) {
+				maxDotProductTemp = dotProductTemp;
+				indexMax = index;
+			}
+			dotProductTemp = 0;
+		}
+		// APOSITION is a constant holding the a position in the byte alphabet, 225
+		return (byte) (indexMax - APOSITION) ; 
 	}
 	
 	
