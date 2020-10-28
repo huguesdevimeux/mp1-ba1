@@ -67,6 +67,7 @@ public class Decrypt {
 	 * @return the character frequencies as an array of float
 	 */
 	public static float[] computeFrequencies(byte[] cipherText) {
+		// TODO Unit TEST ! 
 		float[] frequencies = new float[ALPHABETSIZE];
 		int numberCharNotSpace = 0; 
 		for (byte charTemp : cipherText) {
