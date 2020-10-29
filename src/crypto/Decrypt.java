@@ -11,23 +11,6 @@ public class Decrypt {
 	//source : https://en.wikipedia.org/wiki/Letter_frequency
 	public static final double[] ENGLISHFREQUENCIES = {0.08497,0.01492,0.02202,0.04253,0.11162,0.02228,0.02015,0.06094,0.07546,0.00153,0.01292,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.07587,0.06327,0.09356,0.02758,0.00978,0.0256,0.0015,0.01994,0.00077};
 	
-	public static void main (String[] args) {
-		
-	byte[] name = {91, 32, 69, 83, 92, 70};
-	
-	byte key = 50;
-	
-	byte[][] is = xorBruteForce(name);
-	for(int i = 0; i < is.length; ++i) {
-		for(int j = 0; j < is[i].length; ++j) {
-			
-		
-		System.out.print(is[i][j] + " ");
-	}
-	}
-	}
-	
-	
 	/**
 	 * Method to break a string encoded with different types of cryptosystems
 	 * @param type the integer representing the method to break : 0 = Caesar, 1 = Vigenere, 2 = XOR
