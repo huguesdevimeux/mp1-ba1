@@ -1,6 +1,5 @@
 package crypto;
 
-import static crypto.Helper.bytesToString;
 import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
 
@@ -34,9 +33,10 @@ public class Main {
 
 
 		System.out.println("------Caesar------");
-		// testCaesar(messageBytes, keyBytes[0]);
-    
-    System.out.println("------Vigenere------");
+		testCaesar(messageBytes, keyBytes[0]);
+		
+		
+		System.out.println("------Vigenere------");
 		testVigenere(messageBytes, keyBytes);
 
 		System.out.println("------XOR-------");
@@ -48,58 +48,43 @@ public class Main {
 		System.out.println("------CBC-------");
 		testCBC(messageBytes, keyBytes);
 
+		
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern
 	public static void testCaesar(byte[] string, byte key) {
-		
-		byte[] result = Encrypt.caesar(string, key);
+
 		String plainText = "bonne journée";
 		byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
-			
+
 		byte[] encrypt1 = Encrypt.caesar(plainBytes, (byte) 3);
 		String cipherText = Helper.bytesToString(encrypt1);
 		assert (cipherText.equals("erqqh mrxuqìh"));
-			
-			
+
 		byte[] encrypt2 = Encrypt.caesar(plainBytes, (byte) 3, true);
 		String cipherText1 = Helper.bytesToString(encrypt2);
-		// Test Caesar with spaces	
-    assert (cipherText1.equals("erqqh#mrxuqìh"));
-		
+		// Test Caesar with spaces
+		assert (cipherText1.equals("erqqh#mrxuqìh"));
+
 		System.out.println("Caesar tested successfully.");
 
-			/*
-			 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
-			 * (-key))); System.out.println("Decoded knowing the key : " + sD);
-			 */
-			
-	
-		
-		// Decoding without key
-		byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
+		// Testing caesarBruteForce with the following array
+		// this array corresponds to "i want" in bytes
+		// the following algorithm will create a .txt file and will contain 256
+		// different arrays of characters
+		// you can manually look for "i want" in the .txt file
+		byte[] test = { 105, 32, 119, 97, 110, 116 };
+		byte[][] bruteForceResult = Decrypt.caesarBruteForce(test);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
-		// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
-
-
-		System.out.println("Caesar tested successfully.");
-
-		/*
-		 * // Decoding with key String sD = bytesToString(Encrypt.caesar(result, (byte)
-		 * (-key))); System.out.println("Decoded knowing the key : " + sD);
-		 */
+		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
 		
-		//fait au dessus non??
+		
+		//Hugues
+	//	byte decodingKey = Decrypt.caesarWithFrequencies(result);
+		//String sFD = Helper.bytesToString(Encrypt.caesar(result, decodingKey));
+		//System.out.println("Decoded without knowing the key : " + sFD);
+	}
 	
-	// Decoding without key
-	byte[][] bruteForceResult = Decrypt.caesarBruteForce(result);
-	String sDA = Decrypt.arrayToString(bruteForceResult);
-	// Helper.writeStringToFile(sDA, "bruteForceCaesar.txt"); TODO : BROKEN 
-
-	byte decodingKey = Decrypt.caesarWithFrequencies(result);
-	String sFD = bytesToString(Encrypt.caesar(result, decodingKey));
-//	System.out.println("Decoded without knowing the key : " + sFD);
-}
 
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
@@ -114,12 +99,27 @@ public class Main {
 		assert (Arrays.equals(Encrypt.xor(new byte[] { 32 }, (byte) 6, true), new byte[] { 38 }));
 
 		byte[] message = stringToBytes("helloworld");
-		// This control data has been generated with an external Xor cipher. 
+		// This control data has been generated with an external Xor cipher.
 		byte[] controlData = { 108, 97, 104, 104, 107, 115, 107, 118, 104, 96 };
 		byte[] ciphered = Encrypt.xor(message, (byte) 4);
 		assert Arrays.equals(ciphered, controlData);
 
 		System.out.println("XOR tested successfully.");
+
+		
+		/*
+		 * Testing xorBruteForce with the following array 
+		 * the following array corresponds to "bonne journée" in bytes
+		 * the Helper method will create a .txt file which will contain
+		 * the 256 different arrays and you can manually look
+		 * for "bonne journée"
+		 */
+
+		byte[] test = { 98, 111, 110, 110, 101, 32, 106, 111, 117, 114, 110, -23, 101 };
+		byte[][] bruteForceResult = Decrypt.xorBruteForce(test);
+		String sDA = Decrypt.arrayToString(bruteForceResult);
+		Helper.writeStringToFile(sDA, "bruteForceXor.txt");
+
 	}
 
 	public static void testOTP()
@@ -168,6 +168,6 @@ public class Main {
 		String cipherText2 = Helper.bytesToString(cipherBytes2);
 		assert (cipherText2.equals("cqqog#kqxspìf"));
 
-		System.out.println("Vigenere tested successfully");
+		System.out.println("Vigenere tested successfully.");
 	}
 }

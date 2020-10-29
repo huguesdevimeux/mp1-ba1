@@ -11,6 +11,23 @@ public class Decrypt {
 	//source : https://en.wikipedia.org/wiki/Letter_frequency
 	public static final double[] ENGLISHFREQUENCIES = {0.08497,0.01492,0.02202,0.04253,0.11162,0.02228,0.02015,0.06094,0.07546,0.00153,0.01292,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.07587,0.06327,0.09356,0.02758,0.00978,0.0256,0.0015,0.01994,0.00077};
 	
+	public static void main (String[] args) {
+		
+	byte[] name = {91, 32, 69, 83, 92, 70};
+	
+	byte key = 50;
+	
+	byte[][] is = xorBruteForce(name);
+	for(int i = 0; i < is.length; ++i) {
+		for(int j = 0; j < is[i].length; ++j) {
+			
+		
+		System.out.print(is[i][j] + " ");
+	}
+	}
+	}
+	
+	
 	/**
 	 * Method to break a string encoded with different types of cryptosystems
 	 * @param type the integer representing the method to break : 0 = Caesar, 1 = Vigenere, 2 = XOR
@@ -22,15 +39,27 @@ public class Decrypt {
 		return null; //TODO: to be modified
 	}
 	
-	// hello my name is bite
+	
 	/**
 	 * Converts a 2D byte array to a String
 	 * @param bruteForceResult a 2D byte array containing the result of a brute force method
 	 */
 	public static String arrayToString(byte[][] bruteForceResult) {
-		//TODO : COMPLETE THIS METHOD
+
+		//initalising 2 strings with "" 
+		//result will be the final String, combining the strings of all the arrays
 		
-		return null; //TODO: to be modified
+		//decoded will be the string of every array in the 2D array
+		//result will combine every "decoded" array
+		String result = "";
+		String decoded = "";
+		
+		for (int i = 0; i < bruteForceResult.length; ++i) {
+			
+			decoded = Helper.bytesToString(bruteForceResult[i]);
+			result += decoded + System.lineSeparator();
+		}
+		return result;
 	}
 	
 	
@@ -43,12 +72,26 @@ public class Decrypt {
 	 * @return a 2D byte array containing all the possibilities
 	 */
 	public static byte[][] caesarBruteForce(byte[] cipher) {
-		//TODO : COMPLETE THIS METHOD
 
-		return null; //TODO: to be modified
-	}	
-	
-	//hehehe t con
+		assert (cipher.length > 0);
+
+		// We are going to use the following array to stock caesar encryption
+		// with the ciphered text and the POTENTIAL key
+		byte[] potential;
+
+		// declaring a 2D array that will stock in each line, the potential array
+		// will contain 256 lines and the number of columns depends on the length of
+		// cipher array
+		byte[][] bruteForcePossibilities = new byte[256][cipher.length];
+
+		for (byte key = -128; key < 127; ++key) {
+			potential = Encrypt.caesar(cipher, (byte) key);
+			bruteForcePossibilities[key + 128] = potential;
+		}
+
+		return bruteForcePossibilities;
+	}
+
 	/**
 	 * Method that finds the key to decode a Caesar encoding by comparing frequencies
 	 * @param cipherText the byte array representing the encoded text
@@ -92,9 +135,23 @@ public class Decrypt {
 	 * @return the array of possibilities for the clear text
 	 */
 	public static byte[][] xorBruteForce(byte[] cipher) {
-		//TODO : COMPLETE THIS METHOD
+		assert (cipher.length > 0);
 
-		return null; //TODO: to be modified
+		// We are going to use the following array to stock xor encryption
+		// with the ciphered text and the POTENTIAL key
+		byte[] potential;
+
+		// declaring a 2D array that will stock in each line, the potential array
+		// will contain 256 lines and the number of columns depends on the length of
+		// cipher array
+		byte[][] bruteForcePossibilities = new byte[256][cipher.length];
+		for (byte key = -128; key < 127; ++key) {
+			potential = Encrypt.xor(cipher, key);
+			bruteForcePossibilities[key + 128] = potential;
+
+		}
+
+		return bruteForcePossibilities;
 	}
 	
 	

@@ -2,7 +2,6 @@ package crypto;
 
 import java.util.Arrays;
 import java.util.Random;
-import static crypto.Helper.*;
 
 
 public class Encrypt {
@@ -18,6 +17,7 @@ public class Encrypt {
 	final static Random rand = new Random();
 
 
+	
 	// -----------------------General-------------------------
 
 	/**
@@ -56,8 +56,6 @@ public class Encrypt {
 		for (int i = 0; i < plainText.length; ++i) {
 			
 			//copying elements of plainText in ciphered to not interfere with reference
-			ciphered[i] = plainText[i];
-
 			ciphered[i] = plainText[i];
 
 			if (spaceEncoding == false) {
@@ -139,9 +137,10 @@ public class Encrypt {
 
 		byte[] ciphered = new byte[plainText.length];
 
-
+		//setting the variable below  to allow for elements of 
+		//plainText array to go back to the beginning of keyword array
 		int keywordArray_index = 0;
-		// copy the elements of plainText to not interfere with references
+		
 		for (int i = 0; i < plainText.length; ++i) {
 
 			if (!spaceEncoding && plainText[i] == 32) {
