@@ -26,7 +26,6 @@ public class Main {
 
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
-		
 
     // System.out.println("Original input sanitized : " + messageClean);
 		// System.out.println();
@@ -34,16 +33,15 @@ public class Main {
 
 		System.out.println("------Caesar------");
 		testCaesar(messageBytes, keyBytes[0]);
-		
-		
-		System.out.println("------Vigenere------");
+    
+		System.out.println("------Vigenere------");	
 		testVigenere(messageBytes, keyBytes);
 
 		System.out.println("------XOR-------");
 		testXor(messageBytes, keyBytes[0]);
 
 		System.out.println("------OTP-------");
-		testOTP();
+		testOTP(); // TODO : make it input dependent ! 
 
 		System.out.println("------CBC-------");
 		testCBC(messageBytes, keyBytes);
@@ -53,7 +51,6 @@ public class Main {
 
 	// Run the Encoding and Decoding using the caesar pattern
 	public static void testCaesar(byte[] string, byte key) {
-
 		String plainText = "bonne journée";
 		byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
 
@@ -63,11 +60,16 @@ public class Main {
 
 		byte[] encrypt2 = Encrypt.caesar(plainBytes, (byte) 3, true);
 		String cipherText1 = Helper.bytesToString(encrypt2);
-		// Test Caesar with spaces
-		assert (cipherText1.equals("erqqh#mrxuqìh"));
-
+		// Test Caesar with spaces	
+    	assert (cipherText1.equals("erqqh#mrxuqìh"));
+		
 		System.out.println("Caesar tested successfully.");
-
+		
+		byte[] encryptedMessage = Encrypt.caesar(string, key);
+		float[] frequencies = Decrypt.computeFrequencies(encryptedMessage);
+		byte guessedKey = Decrypt.caesarFindKey(frequencies); 
+		assert (key == guessedKey); 
+		
 		// Testing caesarBruteForce with the following array
 		// this array corresponds to "i want" in bytes
 		// the following algorithm will create a .txt file and will contain 256
@@ -77,13 +79,10 @@ public class Main {
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(test);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
+	
+		System.out.println("Caesar Cryptanalysis tested successfully.");
+
 		
-		
-		//Hugues
-	//	byte decodingKey = Decrypt.caesarWithFrequencies(result);
-		//String sFD = Helper.bytesToString(Encrypt.caesar(result, decodingKey));
-		//System.out.println("Decoded without knowing the key : " + sFD);
-  }
 
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry

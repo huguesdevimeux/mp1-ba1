@@ -1,5 +1,6 @@
 package crypto;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Decrypt {
@@ -92,8 +93,23 @@ public class Decrypt {
 	 * @return the character frequencies as an array of float
 	 */
 	public static float[] computeFrequencies(byte[] cipherText) {
-		//TODO : COMPLETE THIS METHOD
-		return null; //TODO: to be modified
+		// TODO Unit TEST ! 
+		float[] frequencies = new float[ALPHABETSIZE];
+		int numberCharNotSpace = 0; 
+		for (byte charTemp : cipherText) {
+
+			// We have to skip the spaces, which does not make any sen .. well, we have to 
+			if (charTemp != 32) {
+				numberCharNotSpace += 1;
+				// The index is charTemp shifted by 126, as index are only positives integrers
+				// and bytes casted to int are from -128 to 127. 
+				frequencies[charTemp + 128] += 1.0;
+			}
+		}
+		for (int i = 0; i < frequencies.length; i++) {
+			frequencies[i] /= numberCharNotSpace;
+		}
+		return frequencies;
 	}
 	
 	
@@ -103,8 +119,27 @@ public class Decrypt {
 	 * @return the key
 	 */
 	public static byte caesarFindKey(float[] charFrequencies) {
-		//TODO : COMPLETE THIS METHOD
-		return -1; //TODO: to be modified
+		assert (charFrequencies.length == 256);
+		double dotProductTemp = 0;
+		// initialized to -in so "is greatest" comparison will return false, for the first iteration.
+		double maxDotProductTemp = Double.NEGATIVE_INFINITY;
+		int indexMax = -1;
+
+		for (int index = 0; index < charFrequencies.length; index++) {
+
+			// Compute the dot product
+			for (int j = 0; j < ENGLISHFREQUENCIES.length; j++) {
+				// The module handles the warp-around (if the index is greater than the size of charFrequency, then we come back to the beginning)
+				dotProductTemp += ENGLISHFREQUENCIES[j] * charFrequencies[(index + j) % charFrequencies.length];
+			}
+			if (dotProductTemp > maxDotProductTemp) {
+				maxDotProductTemp = dotProductTemp;
+				indexMax = index;
+			}
+			dotProductTemp = 0;
+		}
+		// APOSITION is a constant holding the a position in the byte alphabet, 225
+		return (byte) (indexMax - APOSITION) ; 
 	}
 	
 	
