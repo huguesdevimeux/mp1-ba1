@@ -83,8 +83,7 @@ public class Main {
 	//	byte decodingKey = Decrypt.caesarWithFrequencies(result);
 		//String sFD = Helper.bytesToString(Encrypt.caesar(result, decodingKey));
 		//System.out.println("Decoded without knowing the key : " + sFD);
-	}
-	
+  }
 
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
