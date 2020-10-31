@@ -1,6 +1,5 @@
 package crypto;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class Decrypt {
@@ -36,13 +35,10 @@ public class Decrypt {
 		//decoded will be the string of every array in the 2D array
 		//result will combine every "decoded" array
 		String result = "";
-		String decoded = "";
 		
 		for (int i = 0; i < bruteForceResult.length; ++i) {
-			
-			decoded = Helper.bytesToString(bruteForceResult[i]);
-			result += decoded + System.lineSeparator();
-		}
+			result +=  Helper.bytesToString(bruteForceResult[i]) + System.lineSeparator();
+		} 
 		return result;
 	}
 	
@@ -66,7 +62,7 @@ public class Decrypt {
 		// declaring a 2D array that will stock in each line, the potential array
 		// will contain 256 lines and the number of columns depends on the length of
 		// cipher array
-		byte[][] bruteForcePossibilities = new byte[256][cipher.length];
+		byte[][] bruteForcePossibilities = new byte[ALPHABETSIZE][cipher.length];
 
 		for (byte key = -128; key < 127; ++key) {
 			potential = Encrypt.caesar(cipher, (byte) key);
@@ -162,7 +158,7 @@ public class Decrypt {
 		// declaring a 2D array that will stock in each line, the potential array
 		// will contain 256 lines and the number of columns depends on the length of
 		// cipher array
-		byte[][] bruteForcePossibilities = new byte[256][cipher.length];
+		byte[][] bruteForcePossibilities = new byte[ALPHABETSIZE][cipher.length];
 		for (byte key = -128; key < 127; ++key) {
 			potential = Encrypt.xor(cipher, key);
 			bruteForcePossibilities[key + 128] = potential;

@@ -82,7 +82,7 @@ public class Main {
 	
 		System.out.println("Caesar Cryptanalysis tested successfully.");
 
-		
+	}
 
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
