@@ -81,6 +81,9 @@ public class Encrypt {
 
 		case ONETIME: // == 3
 			
+			//for OTP we need to generate a pad that will allow to encrypt the message
+			//byte[] pad = generatePad(message.length);
+			
 			cipher = oneTimePad(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
 			break;
@@ -212,7 +215,7 @@ public class Encrypt {
 			}
 		}
 
-		return ciphered; // TODO: to be modified
+		return ciphered; 
 	}
 	
 	

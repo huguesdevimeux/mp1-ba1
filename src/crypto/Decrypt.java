@@ -11,17 +11,77 @@ public class Decrypt {
 	//source : https://en.wikipedia.org/wiki/Letter_frequency
 	public static final double[] ENGLISHFREQUENCIES = {0.08497,0.01492,0.02202,0.04253,0.11162,0.02228,0.02015,0.06094,0.07546,0.00153,0.01292,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.07587,0.06327,0.09356,0.02758,0.00978,0.0256,0.0015,0.01994,0.00077};
 	
+	
+	//TODO : remove main method
+	
+	public static void main(String[]args) {
+		
+		String cipher = "i want";
+		int type = 2;
+		
+		String deciphered = breakCipher(cipher, type);
+		
+	System.out.println(deciphered);
+	}
+	
+	
+	
+	
+	
 	/**
 	 * Method to break a string encoded with different types of cryptosystems
 	 * @param type the integer representing the method to break : 0 = Caesar, 1 = Vigenere, 2 = XOR
 	 * @return the decoded string or the original encoded message if type is not in the list above.
 	 */
 	public static String breakCipher(String cipher, int type) {
-		//TODO : COMPLETE THIS METHOD
 		
-		return null; //TODO: to be modified
+		//firstly let's assert the value of type is comprised between 0 and 2
+		//because there are 2 - 0 + 1 = 3 algorithms considered
+		assert(type >= 0 && type <= 2);
+		
+		//converting cipher in a byte array
+		byte [] message = Helper.stringToBytes(cipher);
+		
+		//initialising deciphered string to null
+		//the following switch statement will affect the string
+		String deciphered = "";
+		
+		
+		//creating a 2D array that will stock the values of the array for the xor brute force algorithm
+		byte[][] xorDecipher;
+		
+		switch(type) {
+		
+		//we can use the constants provided in encrypt with CAESAR = 0
+		//VIGENERE = 1
+		//XOR = 2
+		
+		case Encrypt.CAESAR:
+			
+			decipher = caesarWithFrequencies(message);
+			deciphered = 
+			
+			break;
+			
+		case Encrypt.VIGENERE:
+			
+			break;
+			
+			
+		case Encrypt.XOR:
+			
+			xorDecipher = xorBruteForce(message);
+			deciphered = arrayToString(xorDecipher);
+			
+			break;
+		
+		}
+		
+		
+		
+		
+		return deciphered; 
 	}
-	
 	
 	/**
 	 * Converts a 2D byte array to a String

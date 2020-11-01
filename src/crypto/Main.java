@@ -30,8 +30,8 @@ public class Main {
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
 
-		// System.out.println("Original input sanitized : " + messageClean);
-		// System.out.println();
+		System.out.println("Original input sanitized : " + messageClean);
+		System.out.println();
 
 		System.out.println("Enter a number between 0 and 4. If you select \n"
 				+ "0 : the message will be encrypted using caesar \n"
