@@ -5,7 +5,7 @@ import static crypto.Helper.stringToBytes;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-
+import java.util.Scanner;
 
 /*
  * Part 1: Encode (with note that one can reuse the functions to decode)
@@ -19,6 +19,9 @@ public class Main {
 
 	
 	public static void main(String args[]) {
+	
+		Scanner input = new Scanner(System.in);
+
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
 		String key = "2cF%5";
 
@@ -27,26 +30,42 @@ public class Main {
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
 
-    // System.out.println("Original input sanitized : " + messageClean);
+		// System.out.println("Original input sanitized : " + messageClean);
 		// System.out.println();
 
-
+		System.out.println("Enter a number between 0 and 4. If you select \n"
+				+ "0 : the message will be encrypted using caesar \n"
+				+ "1 : the message will be encrypted using vigenere \n"
+				+ "2 : the message will be encrypted using xor \n"
+				+ "3 : the message will be encrypted using onetime \n"
+				+ "4 : the message will be encrypted using CBC");
+		
+		int type = input.nextInt();
+		
+		while(type < 0 || type > 4) {
+			System.out.println("Please input a number between 0 and 4");
+			type = input.nextInt();
+		}
+		
+		String ciphered = Encrypt.encrypt(messageClean, key, type);
+		System.out.println(ciphered);
+		
+		
 		System.out.println("------Caesar------");
 		testCaesar(messageBytes, keyBytes[0]);
-    
-		System.out.println("------Vigenere------");	
+
+		System.out.println("------Vigenere------");
 		testVigenere(messageBytes, keyBytes);
 
 		System.out.println("------XOR-------");
 		testXor(messageBytes, keyBytes[0]);
 
 		System.out.println("------OTP-------");
-		testOTP(); // TODO : make it input dependent ! 
+		testOTP(); // TODO : make it input dependent !
 
 		System.out.println("------CBC-------");
 		testCBC(messageBytes, keyBytes);
 
-		
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern

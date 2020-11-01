@@ -3,7 +3,6 @@ package crypto;
 import java.util.Arrays;
 import java.util.Random;
 
-
 public class Encrypt {
 
 	public static final int CAESAR = 0;
@@ -16,8 +15,6 @@ public class Encrypt {
 
 	final static Random rand = new Random();
 
-
-	
 	// -----------------------General-------------------------
 
 	/**
@@ -32,10 +29,74 @@ public class Encrypt {
 	 * @return an encoded String if the method is called with an unknown type of
 	 *         algorithm, it returns the original message
 	 */
-	public static String encrypt(String message, String key, int type) {
-		// TODO: COMPLETE THIS METHOD
+	public static String encrypt(String plainText, String key, int type) {
 
-		return null; // TODO: to be modified
+		byte[] message = Helper.stringToBytes(plainText);
+
+		// this array will convert the key into an array of bytes
+		// to use later to encode the message
+		byte[] keyArray = Helper.stringToBytes(key);
+		
+		//asserting the length keyArray is greater than 0 as a key with no elements cannot encode a message
+		assert(keyArray.length > 0);
+		
+		// some encryption methods such as caesar or xor only use one byte to encode a message
+		// singleKey will be the first element of keyArray when using caesar or xor
+		//we could directly use keyArray[0] but singleKey will make it easier to notice which algorithms
+		//use a single byte as key
+		byte singleKey = keyArray[0];
+
+		// creating an array that will stock the values of the array of the algorithm chosen
+		byte[] cipher;
+
+		// we initialise the ciphered message as null and the following switch statement will affect the String
+		String ciphered = "";
+
+		switch (type) {
+
+		case CAESAR: // == 0
+			
+			//we are not encoding spaces 
+			//so we do not have to input a third paramater which is a boolean for spaceEncoding			
+			//using singleKey or keyArray[0] will give the same result
+			
+			cipher = caesar(message, singleKey);
+			ciphered = Helper.bytesToString(cipher);
+
+			break;
+
+		case VIGENERE: // == 1
+
+			cipher = vigenere(message, keyArray);
+			ciphered = Helper.bytesToString(cipher);
+
+			break;
+
+		case XOR: // == 2
+	
+			cipher = xor(message, singleKey);
+			ciphered = Helper.bytesToString(cipher);
+
+			break;
+
+		case ONETIME: // == 3
+			
+			cipher = oneTimePad(message, keyArray);
+			ciphered = Helper.bytesToString(cipher);
+			break;
+
+		case CBC:// == 4
+			
+			cipher = cbc(message, keyArray);
+			ciphered = Helper.bytesToString(cipher);
+			break;
+
+	//no default statement needed as a while loop in Main.java already accounts for the fact that the user
+	//must input a number between 0 and 4
+			
+		}
+
+		return ciphered;
 	}
 
 	// -----------------------Caesar-------------------------
@@ -60,7 +121,7 @@ public class Encrypt {
 
 			if (spaceEncoding == false) {
 
-				if (ciphered[i] != 32) {
+				if (ciphered[i] != SPACE) {
 					ciphered[i] += (byte) key;
 				}
 			} else {
@@ -98,8 +159,8 @@ public class Encrypt {
 		// TODO ; Implement check for empty key ?
 		byte[] ciphered = new byte[plainText.length];
 		for (int i = 0; i < plainText.length; i++) {
-			if (!(spaceEncoding) && plainText[i] == 32) {
-				ciphered[i] = (byte) 32;
+			if (!(spaceEncoding) && plainText[i] == SPACE) {
+				ciphered[i] = SPACE;
 			} else {
 				ciphered[i] = (byte) (plainText[i] ^ key);
 			}
@@ -137,13 +198,13 @@ public class Encrypt {
 
 		byte[] ciphered = new byte[plainText.length];
 
-		//setting the variable below  to allow for elements of 
-		//plainText array to go back to the beginning of keyword array
+		// setting the variable below to allow for elements of
+		// plainText array to go back to the beginning of keyword array
 		int keywordArray_index = 0;
-		
+
 		for (int i = 0; i < plainText.length; ++i) {
 
-			if (!spaceEncoding && plainText[i] == 32) {
+			if (!spaceEncoding && plainText[i] == SPACE) {
 				ciphered[i] = plainText[i];
 			} else {
 				ciphered[i] = (byte) (plainText[i] + keyword[keywordArray_index % keyword.length]);
