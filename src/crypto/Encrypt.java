@@ -62,34 +62,31 @@ public class Encrypt {
 			
 			cipher = caesar(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case VIGENERE: // == 1
 
 			cipher = vigenere(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case XOR: // == 2
-	
+
 			cipher = xor(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case ONETIME: // == 3
-			
-			//for OTP we need to generate a pad that will allow to encrypt the message
-			//byte[] pad = generatePad(message.length);
-			
-			cipher = oneTimePad(message, keyArray);
+
+			// for OTP we need to generate a pad that will allow to encrypt the message
+			byte[] pad = generatePad(message.length);
+
+			cipher = oneTimePad(message, pad);
 			ciphered = Helper.bytesToString(cipher);
 			break;
 
 		case CBC:// == 4
-			
+
 			cipher = cbc(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
 			break;
@@ -98,7 +95,6 @@ public class Encrypt {
 	//must input a number between 0 and 4
 			
 		}
-
 		return ciphered;
 	}
 
