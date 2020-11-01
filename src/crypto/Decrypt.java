@@ -85,9 +85,9 @@ public class Decrypt {
 	 * @return the encoding key
 	 */
 	public static byte caesarWithFrequencies(byte[] cipherText) {
-		//TODO : COMPLETE THIS METHOD
-
-		return -1; //TODO: to be modified
+		float[] frequencies = Decrypt.computeFrequencies(cipherText);
+		byte guessedKey = Decrypt.caesarFindKey(frequencies);
+		return guessedKey; 
 	}
 	
 	/**
