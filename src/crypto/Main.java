@@ -85,8 +85,7 @@ public class Main {
 		System.out.println("Caesar tested successfully.");
 		
 		byte[] encryptedMessage = Encrypt.caesar(string, key);
-		float[] frequencies = Decrypt.computeFrequencies(encryptedMessage);
-		byte guessedKey = Decrypt.caesarFindKey(frequencies); 
+		byte guessedKey = Decrypt.caesarWithFrequencies(encryptedMessage); 
 		assert (key == guessedKey); 
 		
 		// Testing caesarBruteForce with the following array
