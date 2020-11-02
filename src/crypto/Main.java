@@ -4,10 +4,9 @@ import static crypto.Helper.cleanString;
 import static crypto.Helper.stringToBytes;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
-
 import java.util.Scanner;
 
 /*
@@ -33,28 +32,68 @@ public class Main {
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
 		
-		// System.out.println("Original input sanitized : " + messageClean);
-		// System.out.println();
+		System.out.println("Original input sanitized : " + messageClean);
+		System.out.println();
 
-		System.out.println("Enter a number between 0 and 4. If you select \n"
-				+ "0 : the message will be encrypted using caesar \n"
-				+ "1 : the message will be encrypted using vigenere \n"
-				+ "2 : the message will be encrypted using xor \n"
-				+ "3 : the message will be encrypted using onetime \n"
-				+ "4 : the message will be encrypted using CBC");
-		
-		int type = input.nextInt();
-		
-		while(type < 0 || type > 4) {
-			System.out.println("Please input a number between 0 and 4");
-			type = input.nextInt();
+		// the user will decide whether to encrypt or decrypt to message above
+		System.out.println("Please decide whether we will encrypt or decrypt the message \n"
+				+ "enter 0 if you want to encrypt the message above or 1 if you want to decrypt a message");
+		int encryptOrDecrypt = input.nextInt();
+
+		while (encryptOrDecrypt != 0 && encryptOrDecrypt != 1) {
+			System.out.println("Please enter either 0 or 1");
+			encryptOrDecrypt = input.nextInt();
 		}
-		
-		//Test
-		String ciphered = Encrypt.encrypt(messageClean, key, type);
-		System.out.println(ciphered);
-		
-		
+
+		// switch statement to evaluate the cases where we encrypt or decrypt
+		switch (encryptOrDecrypt) {
+		case 0:
+			System.out.println("Enter a number between 0 and 4. If you select \n"
+					+ "0 : the message will be encrypted using caesar \n"
+					+ "1 : the message will be encrypted using vigenere \n"
+					+ "2 : the message will be encrypted using xor \n"
+					+ "3 : the message will be encrypted using onetime \n"
+					+ "4 : the message will be encrypted using CBC");
+
+			int typeEncrypt = input.nextInt();
+
+			while (typeEncrypt < 0 || typeEncrypt > 4) {
+				System.out.println("Please input a number between 0 and 4");
+				typeEncrypt = input.nextInt();
+			}
+
+			String ciphered = Encrypt.encrypt(messageClean, key, typeEncrypt);
+			System.out.println(ciphered);
+			break;
+
+		case 1:
+			System.out.println("Enter a number between 0 and 2. If you select \n"
+					+ "0 : the message will be decrypted using caesar with frequencies \n"
+					+ "1 : the message will be decrypted using vigenere frequencies \n"
+					+ "2 : the message will be decrypted using xor brute force \n");
+
+			int typeDecrypt = input.nextInt();
+
+			while (typeDecrypt < 0 || typeDecrypt > 2) {
+				System.out.println("Please input a number between 0 and 2");
+				typeDecrypt = input.nextInt();
+			}
+
+			// printing the ciphered version ch0osing the algorithm chosen by the user
+			String cipher = Encrypt.encrypt(messageClean, key, typeDecrypt);
+			System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher);
+			System.out.println();
+
+			System.out
+					.println("Now we Decrypt the encrypted message, seeing if we can find the original message again");
+			System.out.println();
+
+			// Because we are using brute force for XOR, you will need to manually look for
+			// the decrypted message
+			String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
+			System.out.println(deciphered);
+		}
+	
 		System.out.println("------Caesar------");
 		testCaesar(messageBytes, keyBytes[0]);
 
