@@ -32,7 +32,6 @@ public class Encrypt {
 	public static String encrypt(String plainText, String key, int type) {
 
 		byte[] message = Helper.stringToBytes(plainText);
-
 		// this array will convert the key into an array of bytes
 		// to use later to encode the message
 		byte[] keyArray = Helper.stringToBytes(key);
@@ -74,7 +73,10 @@ public class Encrypt {
 			break;
 
 		case ONETIME: // == 3
-			cipher = oneTimePad(message, keyArray);
+			
+			// for OTP we need to generate a pad that will allow to encrypt the message
+			byte[] pad = generatePad(message.length);
+			cipher = oneTimePad(message, pad);
 			ciphered = Helper.bytesToString(cipher);
 			break;
 
