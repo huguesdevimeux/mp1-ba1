@@ -62,31 +62,24 @@ public class Encrypt {
 			
 			cipher = caesar(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case VIGENERE: // == 1
-
 			cipher = vigenere(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case XOR: // == 2
-	
 			cipher = xor(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case ONETIME: // == 3
-			
 			cipher = oneTimePad(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
 			break;
 
 		case CBC:// == 4
-			
 			cipher = cbc(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
 			break;

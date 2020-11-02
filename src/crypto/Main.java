@@ -47,6 +47,7 @@ public class Main {
 			type = input.nextInt();
 		}
 		
+		//Test
 		String ciphered = Encrypt.encrypt(messageClean, key, type);
 		System.out.println(ciphered);
 		
