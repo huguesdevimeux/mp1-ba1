@@ -1,6 +1,14 @@
 package crypto;
 
+import java.util.ArrayList;
+import java.lang.Math;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 
 public class Decrypt {
 	
@@ -179,8 +187,9 @@ public class Decrypt {
 	 * @return the byte encoding of the clear text
 	 */
 	public static byte[] vigenereWithFrequencies(byte[] cipher) {
-		//TODO : COMPLETE THIS METHOD
-		return null; //TODO: to be modified
+		List<Byte> cipherClean = Decrypt.removeSpaces(cipher);
+		int keyLength = Decrypt.vigenereFindKeyLength(cipherClean);
+		return Decrypt.vigenereFindKey(cipherClean, keyLength);
 	}
 	
 	
@@ -190,11 +199,60 @@ public class Decrypt {
 	 * @param array the array to clean
 	 * @return a List of bytes without spaces
 	 */
-	public static List<Byte> removeSpaces(byte[] array){
-		//TODO : COMPLETE THIS METHOD
-		return null;
+	public static List<Byte> removeSpaces(byte[] array) {
+		List<Byte> withoutSpaces = new ArrayList<Byte>();
+		for (Byte el : array) {
+			if (el != 32) {
+				withoutSpaces.add(el);
+			}
+		}
+		return withoutSpaces;
 	}
 	
+	/**
+	 * Given a text and a shit, compute the number of coincidences with the original text and the shifted text. 
+	 * An element at index i in the original text is a coincidence if 
+	 *  - it is in both original text and shifted text
+	 *  - AND its index in shifted text = i + shift.   
+	 * @param text 
+	 * @param shift
+	 * @return
+	 */
+	public static int getNumberCoincidences(List<Byte> text, int shift) {
+		int countCoincidences = 0;
+		for (int i = 0; i < (text.size() - shift); i++) {
+			if (text.get(i) == text.get(i + shift)) {
+				countCoincidences++;
+			}
+		}
+		return countCoincidences;
+	}
+	/**
+	 * Returns indexes of local maxima. 
+	 * An index i is a local maxima iff count[i] is greater than values at i - 2, i - 1, i + 1, i + 2. 
+	 * @param count : the count of to find maxima in. 
+	 * @return : indexes of local maxima, in order.
+	 */
+
+	public static ArrayList<Integer> getShiftMaxima(int[] count) {
+		// Will contains the index (here, shifts) corresponding to local maxima.
+		ArrayList<Integer> shiftsMaxima = new ArrayList<Integer>();
+		
+		for (int i = 0; i < count.length; i++) {
+			int a = (i - 2 >= 0) ? count[i - 2] : 0;
+			int b = (i - 1 >= 0) ? count[i - 1] : 0; 
+			int c = (i + 1 < count.length) ? count[i + 1] : 0; 
+			int d = (i + 2 < count.length) ? count[i + 2] : 0;
+
+			// Computing the max of all the four values and comparing it to the element is equivalent to compraring each one 
+			// in a row. 
+			int maxTemp = Math.max(Math.max(a, b), Math.max(c,d)); 
+			if (maxTemp < count[i]) {
+				shiftsMaxima.add(i); 
+			}
+		}
+		return shiftsMaxima;
+	}
 	
 	/**
 	 * Method that computes the key length for a Vigenere cipher text.
@@ -202,11 +260,69 @@ public class Decrypt {
 	 * @return the length of the key
 	 */
 	public static int vigenereFindKeyLength(List<Byte> cipher) {
-		//TODO : COMPLETE THIS METHOD
-		return -1; //TODO: to be modified
-	}
+		int maxShift = cipher.size();
+		int[] coincidences = new int[maxShift];
 
+		for (int shift = 0; shift < maxShift; shift++) {
+			// We add +1 to shift, as index 0 corresponds to shift 0+1 = 1, so is for index n.
+			coincidences[shift] = getNumberCoincidences(cipher, shift + 1);
+		}
+
+		// Take the first half of coincidence and get the maxima within it. 
+		ArrayList<Integer> localMaxShifts = getShiftMaxima(
+				Arrays.copyOfRange(coincidences, 0, (int) Math.ceil(coincidences.length / 2.0)));
+		
+		// Map with the difference as key and the number of occurence of it as value.
+		Map<Integer, Integer> occurencesDifferences = new HashMap<>();
+		// Find the difference D between all ajdacent max values (i.e, value[i+1] - value[i]), and 
+		// store number of occurence for each D. 
+		for (int i = 0; i < localMaxShifts.size() - 1; i++) {
+			int tempDiff = localMaxShifts.get(i + 1) - localMaxShifts.get(i);
+			if (!(occurencesDifferences.containsKey(tempDiff))) {
+				occurencesDifferences.put(tempDiff, 1);
+			} else {
+				int numberOccurencesTemp = occurencesDifferences.get(tempDiff);
+				occurencesDifferences.put(tempDiff, numberOccurencesTemp + 1);
+			}
+		}
+		
+		// Get the maximum of shifts occurences 
+		Map.Entry<Integer, Integer> maxEntry = Map.entry(0, 0); // WARNING : JAVA 9? 
+
+		for (Map.Entry<Integer, Integer> entry : occurencesDifferences.entrySet()){
+			if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0){
+				maxEntry = entry;
+			}
+		}
+
+		return maxEntry.getKey(); 
+	}
 	
+	/**
+	 * Given an array arrayToSlice of size alpha, return an array containing every
+	 * element at index start + (k*shift) where k takes every value between 0 and
+	 * floor(arrayToSlice.Length). Return every element at every start + (k*shift),
+	 * k positive integrer less or equal to ceil(((alpha-1) - start)/shift)
+	 * 
+	 * Example :
+	 *  
+	 * arrayToSlice = [1, 2, 3, 4, 5, 6, 7], start = 1, shift = 3,
+	 * Returns [2, 5].
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public static byte[] getPartialArray(List<Byte> arrayToSlice, int start, int shift) {
+		assert ((start >= 0) && (start < arrayToSlice.size()));
+
+		// We substract 1 to the length as we want the maximum index of the array rather than its size.
+		int maxK = (int) Math.ceil(((arrayToSlice.size() - 1) - start) / shift);
+		byte[] sliced = new byte[maxK + 1];
+		for (int k = 0; k <= maxK; k++) {
+			sliced[k] = arrayToSlice.get(start + (k*shift)); 
+		}
+		return sliced;
+	}
 	
 	/**
 	 * Takes the cipher without space, and the key length, and uses the dot product with the English language frequencies 
@@ -216,8 +332,13 @@ public class Decrypt {
 	 * @return the inverse key to decode the Vigenere cipher text
 	 */
 	public static byte[] vigenereFindKey(List<Byte> cipher, int keyLength) {
-		//TODO : COMPLETE THIS METHOD
-		return null; //TODO: to be modified
+		byte[] guessedKey = new byte[keyLength]; 
+		for (int i = 0; i < keyLength; i++) {
+			byte[] partialCipher = getPartialArray(cipher, i, keyLength);
+			// We take the opposite, as we want the INVERSE key 
+			guessedKey[i] = (byte) - caesarWithFrequencies(partialCipher);
+		}
+		return guessedKey;
 	}
 	
 	
@@ -232,13 +353,5 @@ public class Decrypt {
 	public static byte[] decryptCBC(byte[] cipher, byte[] iv) {
 		return Encrypt.cbcInternal(cipher, iv, true);
 	}
-	
-	
-	
-
-		
-		
-		
-		
-		
+			
 }
