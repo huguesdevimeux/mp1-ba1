@@ -16,10 +16,59 @@ public class Decrypt {
 	 * @param type the integer representing the method to break : 0 = Caesar, 1 = Vigenere, 2 = XOR
 	 * @return the decoded string or the original encoded message if type is not in the list above.
 	 */
-	public static String breakCipher(String cipher, int type) {
-		//TODO : COMPLETE THIS METHOD
+	
+	public static void main(String[]args) {
 		
-		return null; //TODO: to be modified
+		String cipher = "erqqh mrxuqìh" ;
+		
+				
+		String decipher = breakCipher(cipher, Encrypt.CAESAR);
+		System.out.println(decipher);
+	}
+	
+	public static String breakCipher(String cipher, int type) {
+		//firstly let's assert the value of type is comprised between 0 and 2
+		//because there are 2 - 0 + 1 = 3 algorithms considered
+		assert(type >= 0 && type <= 2);
+		
+		//converting cipher in a byte array
+		byte [] message = Helper.stringToBytes(cipher);
+		
+		//initialising deciphered string to null
+		//the following switch statement will affect the string
+		String deciphered = "";
+		
+		
+		switch(type) {
+		
+		//we can use the constants provided in encrypt with CAESAR = 0
+		//VIGENERE = 1
+		//XOR = 2
+		
+		case Encrypt.CAESAR:
+			
+			//the function caesarWithFrequencies will return a "guessed" key
+			//we will use it to decrypt the message
+			byte guessedKey = caesarWithFrequencies(message);	
+			//To decrypt caesar, we apply caesar using the inverse key
+			byte[] decipher = Encrypt.caesar(message, (byte) -guessedKey);
+			deciphered = Helper.bytesToString(decipher);
+			break;
+			
+		case Encrypt.VIGENERE:
+			
+			break;
+			
+			
+		case Encrypt.XOR:
+			//creating a 2D array that will stock the values of the array for the xor brute force algorithm
+
+			byte[][] xorDecipher = xorBruteForce(message);
+			deciphered = arrayToString(xorDecipher);
+			break;
+			
+		}		
+		return deciphered; 
 	}
 	
 	
