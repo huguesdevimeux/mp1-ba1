@@ -1,13 +1,10 @@
 package crypto;
 
 import java.util.ArrayList;
-import java.lang.Math;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 
 public class Decrypt {
@@ -25,9 +22,41 @@ public class Decrypt {
 	 * @return the decoded string or the original encoded message if type is not in the list above.
 	 */
 	public static String breakCipher(String cipher, int type) {
-		//TODO : COMPLETE THIS METHOD
+		//firstly let's assert the value of type is comprised between 0 and 2
+		//because there are 2 - 0 + 1 = 3 algorithms considered
+		assert(type >= 0 && type <= 2);
 		
-		return null; //TODO: to be modified
+		//converting cipher into a byte array
+		byte[] message = Helper.stringToBytes(cipher);
+		
+		//initialising deciphered string to null
+		//the following switch statement will affect the string
+		String deciphered = "";
+
+		switch(type) {
+		//we can use the constants provided in encrypt with CAESAR = 0
+		//VIGENERE = 1
+		//XOR = 2
+
+		case Encrypt.CAESAR:
+			//the function caesarWithFrequencies will return a "guessed" key
+			//we will use it to decrypt the message
+			byte guessedKey = caesarWithFrequencies(message);	
+			//To decrypt caesar, we apply caesar using the inverse key
+			byte[] decipher = Encrypt.caesar(message, (byte) -guessedKey);
+			deciphered = Helper.bytesToString(decipher);
+			break;
+			
+		case Encrypt.VIGENERE:
+			break;
+		
+		case Encrypt.XOR:
+			//creating a 2D array that will stock the values of the array for the xor brute force algorithm
+			byte[][] xorDecipher = xorBruteForce(message);
+			deciphered = arrayToString(xorDecipher);
+			break;
+		}
+		return deciphered;
 	}
 	
 	
@@ -37,7 +66,7 @@ public class Decrypt {
 	 */
 	public static String arrayToString(byte[][] bruteForceResult) {
 
-		//initalising 2 strings with "" 
+		//initialising a string with "" 
 		//result will be the final String, combining the strings of all the arrays
 		
 		//decoded will be the string of every array in the 2D array
