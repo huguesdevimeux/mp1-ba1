@@ -273,23 +273,23 @@ public class Decrypt {
 				Arrays.copyOfRange(coincidences, 0, (int) Math.ceil(coincidences.length / 2.0)));
 		
 		// Map with the difference as key and the number of occurence of it as value.
-		Map<Integer, Integer> differencesMax = new HashMap<>();
+		Map<Integer, Integer> occurencesDifferences = new HashMap<>();
+		// Find the difference D between all ajdacent max values (i.e, value[i+1] - value[i]), and 
+		// store number of occurence for each D. 
 		for (int i = 0; i < localMaxShifts.size() - 1; i++) {
 			int tempDiff = localMaxShifts.get(i + 1) - localMaxShifts.get(i);
-
-			// TODO : investigate if when not found getKey returns null, and if it's ok. 
-			if (!(differencesMax.containsKey(tempDiff))) {
-				differencesMax.put(tempDiff, 1);
+			if (!(occurencesDifferences.containsKey(tempDiff))) {
+				occurencesDifferences.put(tempDiff, 1);
 			} else {
-				int numberOccurencesTemp = differencesMax.get(tempDiff);
-				differencesMax.put(tempDiff, numberOccurencesTemp + 1);
+				int numberOccurencesTemp = occurencesDifferences.get(tempDiff);
+				occurencesDifferences.put(tempDiff, numberOccurencesTemp + 1);
 			}
 		}
 		
 		// Get the maximum of shifts occurences 
 		Map.Entry<Integer, Integer> maxEntry = Map.entry(0, 0); // WARNING : JAVA 9? 
 
-		for (Map.Entry<Integer, Integer> entry : differencesMax.entrySet()){
+		for (Map.Entry<Integer, Integer> entry : occurencesDifferences.entrySet()){
 			if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0){
 				maxEntry = entry;
 			}
