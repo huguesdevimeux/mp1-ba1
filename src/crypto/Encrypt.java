@@ -59,7 +59,6 @@ public class Encrypt {
 			//we are not encoding spaces 
 			//so we do not have to input a third paramater which is a boolean for spaceEncoding			
 			//using singleKey or keyArray[0] will give the same result
-			
 			cipher = caesar(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
 			break;
@@ -88,7 +87,6 @@ public class Encrypt {
 	//must input a number between 0 and 4
 			
 		}
-
 		return ciphered;
 	}
 
