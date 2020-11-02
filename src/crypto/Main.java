@@ -35,11 +35,25 @@ public class Main {
 		System.out.println("Original input sanitized : " + messageClean);
 		System.out.println();
 
+		System.out.println("Do you want to test encryption or decryption of the String from the text_one.txt file "
+				+ "or test our own examples? \nPlease input: \n"
+				+ "ED in the console if you want to encrypt or decrypt the long message \n"
+				+ "EXA if you want to test our examples");
+		
+		//asking the user to input either ED or EXA to choose what message they want to test
+		String testing = input.nextLine();
+		//let's assert the user's input is ED or EXA
+		//the console will display an error message if the assertion is false
+		assert(testing.equals("ED") || testing.equals("EXA"));
+		
+		if(testing.equals("ED")) {
 		// the user will decide whether to encrypt or decrypt to message above
-		System.out.println("Please decide whether we will encrypt or decrypt the message \n"
+		System.out.println("Now please decide whether we will encrypt or decrypt the message \n"
 				+ "enter 0 if you want to encrypt the message above or 1 if you want to decrypt a message");
 		int encryptOrDecrypt = input.nextInt();
 
+		//this variable must be either 0 or 1 as there are only 2 possibilities
+		//the while loop checks if the user has put a number other than 0 or 1
 		while (encryptOrDecrypt != 0 && encryptOrDecrypt != 1) {
 			System.out.println("Please enter either 0 or 1");
 			encryptOrDecrypt = input.nextInt();
@@ -93,7 +107,7 @@ public class Main {
 			String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
 			System.out.println(deciphered);
 		}
-	
+	} else if(testing.equals("EXA")) {
 		System.out.println("------Caesar------");
 		testCaesar(messageBytes, keyBytes[0]);
 
@@ -111,8 +125,8 @@ public class Main {
 
 		System.out.println("------UNIT TESTS-------");
 		testsUnitsVigenere();
-		
 	}
+}
 
 	// Run the Encoding and Decoding using the caesar pattern
 	public static void testCaesar(byte[] string, byte key) {
