@@ -5,6 +5,9 @@ import static crypto.Helper.stringToBytes;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
+import java.util.ArrayList;
+
 import java.util.Scanner;
 
 /*
@@ -29,7 +32,7 @@ public class Main {
 
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
-
+		
 		// System.out.println("Original input sanitized : " + messageClean);
 		// System.out.println();
 
@@ -66,6 +69,9 @@ public class Main {
 		System.out.println("------CBC-------");
 		testCBC(messageBytes, keyBytes);
 
+		System.out.println("------UNIT TESTS-------");
+		testsUnitsVigenere();
+		
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern
@@ -99,8 +105,8 @@ public class Main {
 		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
 	
 		System.out.println("Caesar Cryptanalysis tested successfully.");
-
 	}
+		
 
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
@@ -122,6 +128,7 @@ public class Main {
 
 		System.out.println("XOR tested successfully.");
 
+		
 		
 		/*
 		 * Testing xorBruteForce with the following array 
@@ -184,6 +191,53 @@ public class Main {
 		String cipherText2 = Helper.bytesToString(cipherBytes2);
 		assert (cipherText2.equals("cqqog#kqxspìf"));
 
-		System.out.println("Vigenere tested successfully.");
+		System.out.println("Vigenere encryption tested successfully.");
+
+		// Key length finder
+		byte[] ciphered = Encrypt.vigenere(string, key);
+		// NOTE removeSpaces is unit tested below. 
+		List<Byte> messageBytes2 = Decrypt.removeSpaces(ciphered); 
+		int a = Decrypt.vigenereFindKeyLength(messageBytes2);
+		assert (a == key.length);
+
+		byte[] guessedDecryptKey = Decrypt.vigenereWithFrequencies(result);
+		assert (guessedDecryptKey.length == key.length);
+		for (int i = 0; i < guessedDecryptKey.length; i++) {
+			assert -guessedDecryptKey[i] == key[i];
+		}
+		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
+		assert (Arrays.equals(decryptedUnsingGuessedKey, string)); 
+		System.out.println("Vigenere decryption tested successfully");
+
+	}
+
+	public static void testsUnitsVigenere() {
+		// This is weird way to so unit tests, but as we don't know yet how to do them properly, we'll stick to that.
+		// TODO : write a proper test for that. 
+		// int a = Decrypt.getNumberCoincidences(tested, 2); 
+		// assert (a == 1);
+		// a = Decrypt.getNumberCoincidences(tested, 1);
+		// assert (a == 0);
+		
+		// Test getShiftMaxima
+		int[] sorted = {1,2,3,4,5};
+		ArrayList<Integer> b = Decrypt.getShiftMaxima(sorted);
+		assert (b.size() == 1);
+		assert (b.get(0) == 4);  
+		int[] allSame = { 1, 1, 1, 1 };
+		b = Decrypt.getShiftMaxima(allSame);
+		assert (b.size() == 0);
+		int[] normal = { 1, 2, 4, 3, 3 };
+		b = Decrypt.getShiftMaxima(normal);
+		assert (b.size() == 1);
+		assert (b.get(0) == 2);
+		
+		List<Byte> a = Arrays.asList(new Byte[] { 0, 1, 2, 3, 4, 5, 6 });
+		byte[] c = Decrypt.getPartialArray(a, 0, 3);
+		assert Arrays.equals(c, new byte[] { 0, 3,6 });
+		c = Decrypt.getPartialArray(a, 1, 3);
+		assert Arrays.equals(c, new byte[] { 1, 4 });
+
+		System.out.println("Vigenere unit-tests passed");
 	}
 }
