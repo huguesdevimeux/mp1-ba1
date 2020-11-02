@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+
 public class Decrypt {
 	
 	
@@ -186,8 +187,9 @@ public class Decrypt {
 	 * @return the byte encoding of the clear text
 	 */
 	public static byte[] vigenereWithFrequencies(byte[] cipher) {
-	
-	return null; 
+		List<Byte> cipherClean = Decrypt.removeSpaces(cipher);
+		int keyLength = Decrypt.vigenereFindKeyLength(cipherClean);
+		return Decrypt.vigenereFindKey(cipherClean, keyLength);
 	}
 	
 	
@@ -295,8 +297,32 @@ public class Decrypt {
 
 		return maxEntry.getKey(); 
 	}
-
 	
+	/**
+	 * Given an array arrayToSlice of size alpha, return an array containing every
+	 * element at index start + (k*shift) where k takes every value between 0 and
+	 * floor(arrayToSlice.Length). Return every element at every start + (k*shift),
+	 * k positive integrer less or equal to ceil(((alpha-1) - start)/shift)
+	 * 
+	 * Example :
+	 *  
+	 * arrayToSlice = [1, 2, 3, 4, 5, 6, 7], start = 1, shift = 3,
+	 * Returns [2, 5].
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public static byte[] getPartialArray(List<Byte> arrayToSlice, int start, int shift) {
+		assert ((start >= 0) && (start < arrayToSlice.size()));
+
+		// We substract 1 to the length as we want the maximum index of the array rather than its size.
+		int maxK = (int) Math.ceil(((arrayToSlice.size() - 1) - start) / shift);
+		byte[] sliced = new byte[maxK + 1];
+		for (int k = 0; k <= maxK; k++) {
+			sliced[k] = arrayToSlice.get(start + (k*shift)); 
+		}
+		return sliced;
+	}
 	
 	/**
 	 * Takes the cipher without space, and the key length, and uses the dot product with the English language frequencies 
@@ -306,8 +332,13 @@ public class Decrypt {
 	 * @return the inverse key to decode the Vigenere cipher text
 	 */
 	public static byte[] vigenereFindKey(List<Byte> cipher, int keyLength) {
-		//TODO : COMPLETE THIS METHOD
-		return null; //TODO: to be modified
+		byte[] guessedKey = new byte[keyLength]; 
+		for (int i = 0; i < keyLength; i++) {
+			byte[] partialCipher = getPartialArray(cipher, i, keyLength);
+			// We take the opposite, as we want the INVERSE key 
+			guessedKey[i] = (byte) - caesarWithFrequencies(partialCipher);
+		}
+		return guessedKey;
 	}
 	
 	

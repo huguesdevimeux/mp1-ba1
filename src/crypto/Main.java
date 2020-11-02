@@ -32,7 +32,7 @@ public class Main {
 
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
-
+		
 		// System.out.println("Original input sanitized : " + messageClean);
 		// System.out.println();
 
@@ -200,6 +200,13 @@ public class Main {
 		int a = Decrypt.vigenereFindKeyLength(messageBytes2);
 		assert (a == key.length);
 
+		byte[] guessedDecryptKey = Decrypt.vigenereWithFrequencies(result);
+		assert (guessedDecryptKey.length == key.length);
+		for (int i = 0; i < guessedDecryptKey.length; i++) {
+			assert -guessedDecryptKey[i] == key[i];
+		}
+		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
+		assert (Arrays.equals(decryptedUnsingGuessedKey, string)); 
 		System.out.println("Vigenere decryption tested successfully");
 
 	}
@@ -223,7 +230,13 @@ public class Main {
 		int[] normal = { 1, 2, 4, 3, 3 };
 		b = Decrypt.getShiftMaxima(normal);
 		assert (b.size() == 1);
-		assert (b.get(0) == 2); 
+		assert (b.get(0) == 2);
+		
+		List<Byte> a = Arrays.asList(new Byte[] { 0, 1, 2, 3, 4, 5, 6 });
+		byte[] c = Decrypt.getPartialArray(a, 0, 3);
+		assert Arrays.equals(c, new byte[] { 0, 3,6 });
+		c = Decrypt.getPartialArray(a, 1, 3);
+		assert Arrays.equals(c, new byte[] { 1, 4 });
 
 		System.out.println("Vigenere unit-tests passed");
 	}
