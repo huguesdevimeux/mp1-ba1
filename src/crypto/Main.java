@@ -110,8 +110,8 @@ public class Main {
 
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
-		byte[] result = Encrypt.xor(textBytes, key);
-		result = Encrypt.xor(result, key);
+		byte[] result = Encrypt.xor(textBytes, key, true);
+		result = Encrypt.xor(result, key, true);
 		assert (Arrays.equals(result, textBytes));
 
 		// Test spaces disabled
