@@ -36,17 +36,17 @@ public class Main {
 		System.out.println();
 
 		System.out.println("Do you want to test encryption or decryption of the String from the text_one.txt file "
-				+ "or test our own examples? \nPlease input: \n"
-				+ "ED in the console if you want to encrypt or decrypt the long message \n"
-				+ "EXA if you want to test our examples");
+				+ "or from our own examples? \nPlease input: \n"
+				+ "txtFile in the console if you want to encrypt or decrypt the long message \n"
+				+ "Exa if you want to test our examples");
 		
-		//asking the user to input either ED or EXA to choose what message they want to test
+		//asking the user to input either txtFile or Exa to choose what message they want to test
 		String testing = input.nextLine();
-		//let's assert the user's input is ED or EXA
+		//let's assert the user's input is txtFile or Exa
 		//the console will display an error message if the assertion is false
-		assert(testing.equals("ED") || testing.equals("EXA"));
+		assert(testing.equals("txtFile") || testing.equals("Exa"));
 		
-		if(testing.equals("ED")) {
+		if(testing.equals("txtFile")) {
 		// the user will decide whether to encrypt or decrypt to message above
 		System.out.println("Now please decide whether we will encrypt or decrypt the message \n"
 				+ "enter 0 if you want to encrypt the message above or 1 if you want to decrypt a message");
@@ -60,7 +60,7 @@ public class Main {
 		}
 
 		// switch statement to evaluate the cases where we encrypt or decrypt
-		switch (encryptOrDecrypt) {
+		switch (encryptOrDecrypt){
 		case 0:
 			System.out.println("Enter a number between 0 and 4. If you select \n"
 					+ "0 : the message will be encrypted using caesar \n"
@@ -98,16 +98,15 @@ public class Main {
 			System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher);
 			System.out.println();
 
-			System.out
-					.println("Now we Decrypt the encrypted message, seeing if we can find the original message again");
+			System.out.println("Now we Decrypt the encrypted message, seeing if we can find the original message again");
 			System.out.println();
-
 			// Because we are using brute force for XOR, you will need to manually look for
 			// the decrypted message
 			String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
 			System.out.println(deciphered);
 		}
-	} else if(testing.equals("EXA")) {
+		
+	} else if(testing.equals("Exa")) {
 		System.out.println("------Caesar------");
 		testCaesar(messageBytes, keyBytes[0]);
 

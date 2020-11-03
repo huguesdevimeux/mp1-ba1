@@ -54,10 +54,10 @@ public class Encrypt {
 		switch (type) {
 
 		case CAESAR: // == 0
-			
-			//we are not encoding spaces 
-			//so we do not have to input a third paramater which is a boolean for spaceEncoding			
-			//using singleKey or keyArray[0] will give the same result
+
+			// we are not encoding spaces
+			// so we do not have to input a third paramater which is a boolean for spaceEncoding
+			// using singleKey or keyArray[0] will give the same result
 			cipher = caesar(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
 			break;
@@ -73,8 +73,7 @@ public class Encrypt {
 			break;
 
 		case ONETIME: // == 3
-			
-			// for OTP we need to generate a pad that will allow to encrypt the message
+			// for OTP, we need to generate a pad that will allow to encrypt the message
 			byte[] pad = generatePad(message.length);
 			cipher = oneTimePad(message, pad);
 			ciphered = Helper.bytesToString(cipher);
@@ -85,9 +84,9 @@ public class Encrypt {
 			ciphered = Helper.bytesToString(cipher);
 			break;
 
-	//no default statement needed as a while loop in Main.java already accounts for the fact that the user
-	//must input a number between 0 and 4
-			
+		// no default statement needed as a while loop in Main.java already accounts for
+		// the fact that the user must input a number between 0 and 4
+
 		}
 		return ciphered;
 	}
