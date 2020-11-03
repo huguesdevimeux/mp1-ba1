@@ -18,12 +18,10 @@ import java.util.Scanner;
 public class Main {
 
 	// ---------------------------MAIN---------------------------
-
+ public static final Scanner input = new Scanner(System.in);
 	
 	public static void main(String args[]) {
 	
-		Scanner input = new Scanner(System.in);
-
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
 		String key = "2cF%5";
 
@@ -34,48 +32,37 @@ public class Main {
 		
 		System.out.println("Original input sanitized : " + messageClean);
 		System.out.println();
-
-		System.out.println("Do you want to test encryption or decryption of the String from the text_one.txt file "
+		System.out.println("Do you want to test encryption or decryption \n"
+				+ "of the String from the text_one.txt file, from your own input "
 				+ "or from our own examples? \nPlease input: \n"
-				+ "txtFile in the console if you want to encrypt or decrypt the long message \n"
-				+ "Exa if you want to test our examples");
+				+ "0 in the console if you want to encrypt or decrypt the long message \n"
+				+ "1 if you want to encrypt your own message \n"
+				+ "2 if you want to test our examples");
 		
-		//asking the user to input either txtFile or Exa to choose what message they want to test
-		String testing = input.nextLine();
-		//let's assert the user's input is txtFile or Exa
+		//asking the user to input either 0,1,2 to choose what message they want to test
+		int testing = input.nextInt();
+		//let's assert the user's input either 0, 1 or 2
 		//the console will display an error message if the assertion is false
-		assert(testing.equals("txtFile") || testing.equals("Exa"));
+		assert testing == 0 || testing == 1 || testing == 2;
 		
-		if(testing.equals("txtFile")) {
+		if(testing == 0) {
 		// the user will decide whether to encrypt or decrypt to message above
 		System.out.println("Now please decide whether we will encrypt or decrypt the message \n"
 				+ "enter 0 if you want to encrypt the message above or 1 if you want to decrypt a message");
 		int encryptOrDecrypt = input.nextInt();
-
 		//this variable must be either 0 or 1 as there are only 2 possibilities
 		//the while loop checks if the user has put a number other than 0 or 1
 		while (encryptOrDecrypt != 0 && encryptOrDecrypt != 1) {
 			System.out.println("Please enter either 0 or 1");
 			encryptOrDecrypt = input.nextInt();
 		}
-
 		// switch statement to evaluate the cases where we encrypt or decrypt
 		switch (encryptOrDecrypt){
 		case 0:
-			System.out.println("Enter a number between 0 and 4. If you select \n"
-					+ "0 : the message will be encrypted using caesar \n"
-					+ "1 : the message will be encrypted using vigenere \n"
-					+ "2 : the message will be encrypted using xor \n"
-					+ "3 : the message will be encrypted using onetime \n"
-					+ "4 : the message will be encrypted using CBC");
-
-			int typeEncrypt = input.nextInt();
-
-			while (typeEncrypt < 0 || typeEncrypt > 4) {
-				System.out.println("Please input a number between 0 and 4");
-				typeEncrypt = input.nextInt();
-			}
-
+			//created a method that will display all possible algorithms you can use to encrypt
+			whatEncryption();
+			//method to ask user to select an algorithm to encrypt
+			int typeEncrypt = askUser(0, 4);	
 			String ciphered = Encrypt.encrypt(messageClean, key, typeEncrypt);
 			System.out.println(ciphered);
 			break;
@@ -87,18 +74,14 @@ public class Main {
 					+ "2 : the message will be decrypted using xor brute force \n");
 
 			int typeDecrypt = input.nextInt();
-
 			while (typeDecrypt < 0 || typeDecrypt > 2) {
 				System.out.println("Please input a number between 0 and 2");
 				typeDecrypt = input.nextInt();
 			}
-
-			// printing the ciphered version ch0osing the algorithm chosen by the user
+			// printing the ciphered version choosing the algorithm chosen by the user
 			String cipher = Encrypt.encrypt(messageClean, key, typeDecrypt);
-			System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher);
-			System.out.println();
-
-			System.out.println("Now we Decrypt the encrypted message, seeing if we can find the original message again");
+			System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher + "\n "
+					+ "Now we Decrypt the encrypted message, seeing if we can find the original message again");
 			System.out.println();
 			// Because we are using brute force for XOR, you will need to manually look for
 			// the decrypted message
@@ -106,26 +89,41 @@ public class Main {
 			System.out.println(deciphered);
 		}
 		
-	} else if(testing.equals("Exa")) {
-		System.out.println("------Caesar------");
-		testCaesar(messageBytes, keyBytes[0]);
+		}else if(testing == 1) {
+			//user inputs their own message
+			System.out.println("Please input your message");
+			input.nextLine();
+			String myMessage = input.nextLine();
+			
+			System.out.println("Now please input a key");
+			key = input.nextLine();
+			assert(key != null);
+			
+			whatEncryption();
+			int typeEncrypt = askUser(0, 4);
+			String myMessageCiphered = Encrypt.encrypt(myMessage, key, typeEncrypt);
+			System.out.println(myMessageCiphered);
+			
+		} else if(testing == 2){
+			System.out.println("------Caesar------");
+			testCaesar(messageBytes, keyBytes[0]);
 
-		System.out.println("------Vigenere------");
-		testVigenere(messageBytes, keyBytes);
+			System.out.println("------Vigenere------");
+			testVigenere(messageBytes, keyBytes);
 
-		System.out.println("------XOR-------");
-		testXor(messageBytes, keyBytes[0]);
+			System.out.println("------XOR-------");
+			testXor(messageBytes, keyBytes[0]);
 
-		System.out.println("------OTP-------");
-		testOTP(); // TODO : make it input dependent !
+			System.out.println("------OTP-------");
+			testOTP(); // TODO : make it input dependent !
 
-		System.out.println("------CBC-------");
-		testCBC(messageBytes, keyBytes);
+			System.out.println("------CBC-------");
+			testCBC(messageBytes, keyBytes);
 
-		System.out.println("------UNIT TESTS-------");
-		testsUnitsVigenere();
+			System.out.println("------UNIT TESTS-------");
+			testsUnitsVigenere();
+		}
 	}
-}
 
 	// Run the Encoding and Decoding using the caesar pattern
 	public static void testCaesar(byte[] string, byte key) {
@@ -282,5 +280,25 @@ public class Main {
 		assert Arrays.equals(c, new byte[] { 1, 4 });
 
 		System.out.println("Vigenere unit-tests passed");
+	}
+	
+	static void whatEncryption() {
+		System.out.println("Enter a number between 0 and 4. If you select \n"
+				+ "0 : the message will be encrypted using caesar \n"
+				+ "1 : the message will be encrypted using vigenere \n"
+				+ "2 : the message will be encrypted using xor \n"
+				+ "3 : the message will be encrypted using onetime \n"
+				+ "4 : the message will be encrypted using CBC");
+		
+
+	}
+	public static int askUser(int lowBound, int upBound) {
+		int response = input.nextInt();
+		while (response < lowBound || response > upBound) {
+			System.out.println("Please input a number between " + lowBound + " and " + upBound);
+			response = input.nextInt();
+		}
+		return response;
+		
 	}
 }
