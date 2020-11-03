@@ -160,7 +160,6 @@ public class Main {
 		System.out.println("Caesar Cryptanalysis tested successfully.");
 	}
 		
-
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
 		byte[] result = Encrypt.xor(textBytes, key);
@@ -178,11 +177,6 @@ public class Main {
 		byte[] controlData = { 108, 97, 104, 104, 107, 115, 107, 118, 104, 96 };
 		byte[] ciphered = Encrypt.xor(message, (byte) 4);
 		assert Arrays.equals(ciphered, controlData);
-
-		System.out.println("XOR tested successfully.");
-
-		
-		
 		/*
 		 * Testing xorBruteForce with the following array 
 		 * the following array corresponds to "bonne journée" in bytes
@@ -190,12 +184,12 @@ public class Main {
 		 * the 256 different arrays and you can manually look
 		 * for "bonne journée"
 		 */
-
 		byte[] test = { 98, 111, 110, 110, 101, 32, 106, 111, 117, 114, 110, -23, 101 };
 		byte[][] bruteForceResult = Decrypt.xorBruteForce(test);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceXor.txt");
 
+		System.out.println("XOR tested successfully.");
 	}
 
 	public static void testOTP()
@@ -219,12 +213,9 @@ public class Main {
 		// Test symetry 
 		assert (Arrays.equals(textBytes, resultTemp));
 		System.out.println("CBC tested successfully.");
-
 		// TODO Implement good tests for this ?
 	}
-
-
-
+	
 	public static void testVigenere(byte[] string, byte[] key) {
 
 		byte[] result = Encrypt.vigenere(string, key);
@@ -233,7 +224,6 @@ public class Main {
 
 		// creating array of keys used in example
 		byte[] keys = { 1, 2, 3 };
-
 		// encrypting without encoding spaces(spaceEncoding (boolean parameter of vigenere) considered false)
 		byte[] cipherBytes1 = Encrypt.vigenere(plainBytes, keys, false);
 		String cipherText1 = Helper.bytesToString(cipherBytes1);

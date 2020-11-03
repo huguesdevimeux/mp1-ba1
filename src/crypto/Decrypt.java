@@ -47,7 +47,12 @@ public class Decrypt {
 			deciphered = Helper.bytesToString(decipher);
 			break;
 			
-		case Encrypt.VIGENERE:
+		case Encrypt.VIGENERE:	
+			//vigenereWithFrequencies will return a "guessed" array for the key
+			//which we will use to decrypt a message
+			byte[] guessedArray = vigenereWithFrequencies(message) ;
+			byte[]deciphering = Encrypt.vigenere(message, guessedArray);
+			deciphered = Helper.bytesToString(deciphering);
 			break;
 		
 		case Encrypt.XOR:
@@ -58,7 +63,6 @@ public class Decrypt {
 		}
 		return deciphered;
 	}
-	
 	
 	/**
 	 * Converts a 2D byte array to a String
@@ -95,17 +99,14 @@ public class Decrypt {
 		// We are going to use the following array to stock caesar encryption
 		// with the ciphered text and the POTENTIAL key
 		byte[] potential;
-
 		// declaring a 2D array that will stock in each line, the potential array
 		// will contain 256 lines and the number of columns depends on the length of
 		// cipher array
 		byte[][] bruteForcePossibilities = new byte[ALPHABETSIZE][cipher.length];
-
 		for (byte key = -128; key < 127; ++key) {
 			potential = Encrypt.caesar(cipher, (byte) key);
 			bruteForcePossibilities[key + 128] = potential;
 		}
-
 		return bruteForcePossibilities;
 	}
 
@@ -199,9 +200,7 @@ public class Decrypt {
 		for (byte key = -128; key < 127; ++key) {
 			potential = Encrypt.xor(cipher, key);
 			bruteForcePossibilities[key + 128] = potential;
-
 		}
-
 		return bruteForcePossibilities;
 	}
 	
@@ -220,8 +219,6 @@ public class Decrypt {
 		int keyLength = Decrypt.vigenereFindKeyLength(cipherClean);
 		return Decrypt.vigenereFindKey(cipherClean, keyLength);
 	}
-	
-	
 	
 	/**
 	 * Helper Method used to remove the space character in a byte array for the clever Vigenere decoding
