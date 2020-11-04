@@ -1,13 +1,10 @@
 package crypto;
 
 import java.util.ArrayList;
-import java.lang.Math;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 
 public class Decrypt {
@@ -18,18 +15,54 @@ public class Decrypt {
 	
 	//source : https://en.wikipedia.org/wiki/Letter_frequency
 	public static final double[] ENGLISHFREQUENCIES = {0.08497,0.01492,0.02202,0.04253,0.11162,0.02228,0.02015,0.06094,0.07546,0.00153,0.01292,0.04025,0.02406,0.06749,0.07507,0.01929,0.00095,0.07587,0.06327,0.09356,0.02758,0.00978,0.0256,0.0015,0.01994,0.00077};
-	
+
 	/**
 	 * Method to break a string encoded with different types of cryptosystems
 	 * @param type the integer representing the method to break : 0 = Caesar, 1 = Vigenere, 2 = XOR
 	 * @return the decoded string or the original encoded message if type is not in the list above.
 	 */
 	public static String breakCipher(String cipher, int type) {
-		//TODO : COMPLETE THIS METHOD
+		//firstly let's assert the value of type is comprised between 0 and 2
+		//because there are 2 - 0 + 1 = 3 algorithms considered
+		assert(type >= 0 && type <= 2);
 		
-		return null; //TODO: to be modified
+		//converting cipher into a byte array
+		byte[] message = Helper.stringToBytes(cipher);
+		
+		//initialising deciphered string to null
+		//the following switch statement will affect the string
+		String deciphered = "";
+
+		switch(type) {
+		//we can use the constants provided in encrypt with CAESAR = 0
+		//VIGENERE = 1
+		//XOR = 2
+
+		case Encrypt.CAESAR:
+			//the function caesarWithFrequencies will return a "guessed" key
+			//we will use it to decrypt the message
+			byte guessedKey = caesarWithFrequencies(message);	
+			//To decrypt caesar, we apply caesar using the inverse key
+			byte[] decipher = Encrypt.caesar(message, (byte) -guessedKey);
+			deciphered = Helper.bytesToString(decipher);
+			break;
+			
+		case Encrypt.VIGENERE:	
+			//vigenereWithFrequencies will return a "guessed" array for the key
+			//which we will use to decrypt a message
+			byte[] guessedArray = vigenereWithFrequencies(message) ;
+			byte[]deciphering = Encrypt.vigenere(message, guessedArray);
+			deciphered = Helper.bytesToString(deciphering);
+			break;
+		
+		case Encrypt.XOR:
+			//creating a 2D array that will stock the values of the array for the xor brute force algorithm
+			byte[][] xorDecipher = xorBruteForce(message);
+			deciphered = arrayToString(xorDecipher);
+			break;
+		}
+		return deciphered;
 	}
-	
 	
 	/**
 	 * Converts a 2D byte array to a String
@@ -37,7 +70,7 @@ public class Decrypt {
 	 */
 	public static String arrayToString(byte[][] bruteForceResult) {
 
-		//initalising 2 strings with "" 
+		//initialising a string with "" 
 		//result will be the final String, combining the strings of all the arrays
 		
 		//decoded will be the string of every array in the 2D array
@@ -66,17 +99,14 @@ public class Decrypt {
 		// We are going to use the following array to stock caesar encryption
 		// with the ciphered text and the POTENTIAL key
 		byte[] potential;
-
 		// declaring a 2D array that will stock in each line, the potential array
 		// will contain 256 lines and the number of columns depends on the length of
 		// cipher array
 		byte[][] bruteForcePossibilities = new byte[ALPHABETSIZE][cipher.length];
-
 		for (byte key = -128; key < 127; ++key) {
 			potential = Encrypt.caesar(cipher, (byte) key);
 			bruteForcePossibilities[key + 128] = potential;
 		}
-
 		return bruteForcePossibilities;
 	}
 
@@ -170,9 +200,7 @@ public class Decrypt {
 		for (byte key = -128; key < 127; ++key) {
 			potential = Encrypt.xor(cipher, key);
 			bruteForcePossibilities[key + 128] = potential;
-
 		}
-
 		return bruteForcePossibilities;
 	}
 	
@@ -191,8 +219,6 @@ public class Decrypt {
 		int keyLength = Decrypt.vigenereFindKeyLength(cipherClean);
 		return Decrypt.vigenereFindKey(cipherClean, keyLength);
 	}
-	
-	
 	
 	/**
 	 * Helper Method used to remove the space character in a byte array for the clever Vigenere decoding

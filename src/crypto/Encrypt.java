@@ -32,7 +32,6 @@ public class Encrypt {
 	public static String encrypt(String plainText, String key, int type) {
 
 		byte[] message = Helper.stringToBytes(plainText);
-
 		// this array will convert the key into an array of bytes
 		// to use later to encode the message
 		byte[] keyArray = Helper.stringToBytes(key);
@@ -55,47 +54,40 @@ public class Encrypt {
 		switch (type) {
 
 		case CAESAR: // == 0
-			
-			//we are not encoding spaces 
-			//so we do not have to input a third paramater which is a boolean for spaceEncoding			
-			//using singleKey or keyArray[0] will give the same result
-			
+
+			// we are not encoding spaces
+			// so we do not have to input a third paramater which is a boolean for spaceEncoding
+			// using singleKey or keyArray[0] will give the same result
 			cipher = caesar(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case VIGENERE: // == 1
-
 			cipher = vigenere(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case XOR: // == 2
-	
 			cipher = xor(message, singleKey);
 			ciphered = Helper.bytesToString(cipher);
-
 			break;
 
 		case ONETIME: // == 3
-			
-			cipher = oneTimePad(message, keyArray);
+			// for OTP, we need to generate a pad that will allow to encrypt the message
+			byte[] pad = generatePad(message.length);
+			cipher = oneTimePad(message, pad);
 			ciphered = Helper.bytesToString(cipher);
 			break;
 
 		case CBC:// == 4
-			
 			cipher = cbc(message, keyArray);
 			ciphered = Helper.bytesToString(cipher);
 			break;
 
-	//no default statement needed as a while loop in Main.java already accounts for the fact that the user
-	//must input a number between 0 and 4
-			
-		}
+		// no default statement needed as a while loop in Main.java already accounts for
+		// the fact that the user must input a number between 0 and 4
 
+		}
 		return ciphered;
 	}
 
