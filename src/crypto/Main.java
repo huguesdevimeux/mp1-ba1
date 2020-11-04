@@ -86,6 +86,7 @@ public class Main {
 				// the decrypted message
 				String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
 				System.out.println(deciphered);
+				break;
 			}
 
 		} else if (testing == 1) {
