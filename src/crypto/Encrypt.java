@@ -86,7 +86,6 @@ public class Encrypt {
 
 		// no default statement needed as a while loop in Main.java already accounts for
 		// the fact that the user must input a number between 0 and 4
-
 		}
 		return ciphered;
 	}
@@ -315,9 +314,7 @@ public class Encrypt {
 		for (int i = 0; i < size; i++) {
 				result[i] = (byte) rand.nextInt(256); 
 		}
-
 		return result;
-
 	}
 
 }
