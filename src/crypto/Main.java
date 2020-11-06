@@ -23,28 +23,30 @@ public class Main {
 	public static void main(String args[]) {
 
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
-	//	String inputMessage2 = Helper.readStringFromFile("text_two.txt");
-		
+		// String inputMessage2 = Helper.readStringFromFile("text_two.txt");
+
 		String key = "2cF%5";
 		String messageClean = cleanString(inputMessage);
-		
+
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
 
 		System.out.println("Original input sanitized : " + messageClean);
 		System.out.println();
 		// method that will display the user's options to encrypt or decrypt
-		//(ie: the .txt file, their sentence or our unit tests)
+		// (ie: the .txt file, their sentence or our unit tests)
 		possibilities();
-			
-		// asking the user to input either 0,1,2 to choose what message they want to test
+
+		// asking the user to input either 0,1,2 to choose what message they want to
+		// test
 		int testing = input.nextInt();
 		// the console will display an error message if the 0assertion is false
-		assert(testing == 0 || testing == 1 || testing == 2);
+		assert (testing == 0 || testing == 1 || testing == 2);
 
 		if (testing == 0) {
 			// the user will decide whether to encrypt or decrypt to message above
-			System.out.println("Now enter 0 if you want to encrypt the message above or 1 if you want to decrypt a message");
+			System.out.println(
+					"Now enter 0 if you want to encrypt the message above or 1 if you want to decrypt a message");
 			int encryptOrDecrypt = input.nextInt();
 			// this variable must be either 0 or 1 as there are only 2 possibilities
 			// the while loop checks if the user has put a number other than 0 or 1
@@ -54,52 +56,54 @@ public class Main {
 			}
 			// switch statement to evaluate the cases where we encrypt or decrypt
 			switch (encryptOrDecrypt) {
-			case 0:
-				// created 2 methods that we will use twice, to avoid redundant code
-				// created a method that will display all possible algorithms you can use to encrypt
-				whatEncryption();
-				int typeEncrypt = askUser(0, 4);
-				// method to ask user to select an algorithm to encrypt
-				// limited to 5 options as there are 5 algorithms possible
-				String ciphered = Encrypt.encrypt(messageClean, key, typeEncrypt);
-				System.out.println(ciphered);
-				break;
+				case 0:
+					// created 2 methods that we will use twice, to avoid redundant code
+					// created a method that will display all possible algorithms you can use to
+					// encrypt
+					whatEncryption();
+					int typeEncrypt = askUser(0, 4);
+					// method to ask user to select an algorithm to encrypt
+					// limited to 5 options as there are 5 algorithms possible
+					String ciphered = Encrypt.encrypt(messageClean, key, typeEncrypt);
+					System.out.println(ciphered);
+					break;
 
-			case 1:
-				System.out.println("Enter a number between 0 and 2. If you select \n"
-						+ "0 : the message will be decrypted using caesar with frequencies \n"
-						+ "1 : the message will be decrypted using vigenere frequencies \n"
-						+ "2 : the message will be decrypted using xor brute force \n");
-				int typeDecrypt = input.nextInt();
-				while (typeDecrypt < 0 || typeDecrypt > 2) {
-					System.out.println("Please input a number between 0 and 2");
-					typeDecrypt = input.nextInt();
-				}
-				// printing the ciphered version choosing the algorithm chosen by the user
-				String cipher = Encrypt.encrypt(messageClean, key, typeDecrypt);
-				System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher + "\n"
-						+ "Now we Decrypt the encrypted message, seeing if we can find the original message again");
-				System.out.println();
-				// Because we are using brute force for XOR, you will need to manually look for
-				// the decrypted message
-				String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
-				System.out.println(deciphered);
-				break;
+				case 1:
+					System.out.println("Enter a number between 0 and 2. If you select \n"
+							+ "0 : the message will be decrypted using caesar with frequencies \n"
+							+ "1 : the message will be decrypted using vigenere frequencies \n"
+							+ "2 : the message will be decrypted using xor brute force \n");
+					int typeDecrypt = input.nextInt();
+					while (typeDecrypt < 0 || typeDecrypt > 2) {
+						System.out.println("Please input a number between 0 and 2");
+						typeDecrypt = input.nextInt();
+					}
+					// printing the ciphered version choosing the algorithm chosen by the user
+					String cipher = Encrypt.encrypt(messageClean, key, typeDecrypt);
+					System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher
+							+ "\n"
+							+ "Now we Decrypt the encrypted message, seeing if we can find the original message again");
+					System.out.println();
+					// Because we are using brute force for XOR, you will need to manually look for
+					// the decrypted message
+					String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
+					System.out.println(deciphered);
+					break;
 			}
 
 		} else if (testing == 1) {
 			// user inputs their own message
-			
+
 			System.out.println("Please input your message\n"
 					+ "Please ensure you write a long enough message as we will then attempt to decrypt it\n"
 					+ "using caesar/vigenere with frequencies, which rely on probabilities");
 			input.nextLine();
 			String myMessage = input.nextLine();
-			
+
 			System.out.println("Now please input a key");
 			key = input.nextLine();
-			assert(key!=null);
-			
+			assert (key != null);
+
 			whatEncryption();
 			int typeEncrypt = askUser(0, 4);
 			String myMessageCiphered = Encrypt.encrypt(myMessage, key, typeEncrypt);
@@ -115,15 +119,16 @@ public class Main {
 			assert (toDecrypt.equals("y") || toDecrypt.equals("n"));
 
 			switch (toDecrypt) {
-			case "y":
-				// we are using the message that was encrypted before with the same algorithm to decrpyt
-				assert (typeEncrypt <= 2 && typeEncrypt >= 0);
-				String decrypted = Decrypt.breakCipher(myMessageCiphered, typeEncrypt);
-				System.out.println("The decrypted message is \n" + decrypted);
-				break;
+				case "y":
+					// we are using the message that was encrypted before with the same algorithm to
+					// decrpyt
+					assert (typeEncrypt <= 2 && typeEncrypt >= 0);
+					String decrypted = Decrypt.breakCipher(myMessageCiphered, typeEncrypt);
+					System.out.println("The decrypted message is \n" + decrypted);
+					break;
 
-			case "n":
-				break;
+				case "n":
+					break;
 			}
 
 		} else if (testing == 2) {
@@ -306,7 +311,9 @@ public class Main {
 
 		System.out.println("Vigenere unit-tests passed");
 	}
-	//method will simply display the different algorithms you can choose from - to not 'pollute' the main method
+
+	// method will simply display the different algorithms you can choose from - to
+	// not 'pollute' the main method
 	public static void whatEncryption() {
 		System.out.println("Enter a number between 0 and 4. If you select \n"
 				+ "0 : the message will be encrypted using caesar \n"
@@ -314,7 +321,8 @@ public class Main {
 				+ "2 : the message will be encrypted using xor \n"
 				+ "3 : the message will be encrypted using onetime \n" + "4 : the message will be encrypted using CBC");
 	}
-	//same as the previous method
+
+	// same as the previous method
 	public static int askUser(int lowBound, int upBound) {
 		int response = input.nextInt();
 		while (response < lowBound || response > upBound) {
@@ -323,14 +331,15 @@ public class Main {
 		}
 		return response;
 	}
-	//method will ask what the user wants to encrypt or decrypt
+
+	// method will ask what the user wants to encrypt or decrypt
 	public static void possibilities() {
 		System.out.println("Do you want to test encryption or decryption \n"
 				+ "of the String from the text.txt file, from your own input or from our own examples? \nPlease input: \n"
 				+ "0 in the console if you want to encrypt or decrypt the long message \n"
-				+ "1 if you want to encrypt your own message \n"
-				+ "2 if you want to test our examples\n");
+				+ "1 if you want to encrypt your own message \n" + "2 if you want to test our examples\n");
 	}
+
 	// method that will be called when the program is over to ask whether the user
 	// needs additional information
 	public static void help() {
@@ -338,21 +347,21 @@ public class Main {
 		input.nextLine();
 		String a = input.nextLine();
 		switch (a) {
-		case "y":
-			System.out.println("Firstly, the program will display all your options:\n"
-					+ "You can select the sentence provided in res: text_one.txt, or your own sentence, or our unit tests\n"
-					+ "you will need to input either 0, 1 or 2 to choose what you want to encrypt/decrypt\n(be careful, "
-					+ "inputting anything else will result in an assertion error)\n"
-					+ "you will then be asked to choose whether you want to encrypt or decrypt the message you've chosen just before\n"
-					+ "0 to encrypt and 1 to decrypt, any other number or string will not work and will result in error\n"
-					+ "then, you will choose which algorithm to use to encrypt/decrypt."
-					+ "if you choose to decrypt the .txt file, \nwe will first encrypt it using the algorithm chosen and "
-					+ "decrypt it back\n"
-					+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption");
-			break;
-		case "n":
-			System.exit(0);
-			break;
+			case "y":
+				System.out.println("Firstly, the program will display all your options:\n"
+						+ "You can select the sentence provided in res: text_one.txt, or your own sentence, or our unit tests\n"
+						+ "you will need to input either 0, 1 or 2 to choose what you want to encrypt/decrypt\n(be careful, "
+						+ "inputting anything else will result in an assertion error)\n"
+						+ "you will then be asked to choose whether you want to encrypt or decrypt the message you've chosen just before\n"
+						+ "0 to encrypt and 1 to decrypt, any other number or string will not work and will result in error\n"
+						+ "then, you will choose which algorithm to use to encrypt/decrypt."
+						+ "if you choose to decrypt the .txt file, \nwe will first encrypt it using the algorithm chosen and "
+						+ "decrypt it back\n"
+						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption");
+				break;
+			case "n":
+				System.exit(0);
+				break;
 		}
 	}
 
