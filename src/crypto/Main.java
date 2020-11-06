@@ -216,7 +216,7 @@ public class Main {
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceXor.txt");
 
-		System.out.println("XOR tested successfully.");
+		System.out.println("XOR encryption tested successfully.");
 	}
 
 	public static void testOTP() {
@@ -229,7 +229,7 @@ public class Main {
 		assert Arrays.equals(message, cipheredBack);
 
 		// TODO implement other tests
-		System.out.println("OTP tested successfully.");
+		System.out.println("OTP encryption tested successfully.");
 	}
 
 	public static void testCBC(byte[] textBytes, byte[] pad) {
@@ -238,7 +238,7 @@ public class Main {
 
 		// Test symetry
 		assert (Arrays.equals(textBytes, resultTemp));
-		System.out.println("CBC tested successfully.");
+		System.out.println("CBC encryption tested successfully.");
 		// TODO Implement good tests for this ?
 	}
 
