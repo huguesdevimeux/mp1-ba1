@@ -35,57 +35,63 @@ public class Encrypt {
 		// this array will convert the key into an array of bytes
 		// to use later to encode the message
 		byte[] keyArray = Helper.stringToBytes(key);
-		
-		//asserting the length keyArray is greater than 0 as a key with no elements cannot encode a message
-		assert(keyArray.length > 0);
-		
-		// some encryption methods such as caesar or xor only use one byte to encode a message
+
+		// asserting the length keyArray is greater than 0 as a key with no elements
+		// cannot encode a message
+		assert (keyArray.length > 0);
+
+		// some encryption methods such as caesar or xor only use one byte to encode a
+		// message
 		// singleKey will be the first element of keyArray when using caesar or xor
-		//we could directly use keyArray[0] but singleKey will make it easier to notice which algorithms
-		//use a single byte as key
+		// we could directly use keyArray[0] but singleKey will make it easier to notice
+		// which algorithms
+		// use a single byte as key
 		byte singleKey = keyArray[0];
 
-		// creating an array that will stock the values of the array of the algorithm chosen
+		// creating an array that will stock the values of the array of the algorithm
+		// chosen
 		byte[] cipher;
 
-		// we initialise the ciphered message as null and the following switch statement will affect the String
+		// we initialise the ciphered message as null and the following switch statement
+		// will affect the String
 		String ciphered = "";
 
 		switch (type) {
 
-		case CAESAR: // == 0
+			case CAESAR: // == 0
 
-			// we are not encoding spaces
-			// so we do not have to input a third paramater which is a boolean for spaceEncoding
-			// using singleKey or keyArray[0] will give the same result
-			cipher = caesar(message, singleKey);
-			ciphered = Helper.bytesToString(cipher);
-			break;
+				// we are not encoding spaces
+				// so we do not have to input a third paramater which is a boolean for
+				// spaceEncoding
+				// using singleKey or keyArray[0] will give the same result
+				cipher = caesar(message, singleKey);
+				ciphered = Helper.bytesToString(cipher);
+				break;
 
-		case VIGENERE: // == 1
-			cipher = vigenere(message, keyArray);
-			ciphered = Helper.bytesToString(cipher);
-			break;
+			case VIGENERE: // == 1
+				cipher = vigenere(message, keyArray);
+				ciphered = Helper.bytesToString(cipher);
+				break;
 
-		case XOR: // == 2
-			cipher = xor(message, singleKey);
-			ciphered = Helper.bytesToString(cipher);
-			break;
+			case XOR: // == 2
+				cipher = xor(message, singleKey);
+				ciphered = Helper.bytesToString(cipher);
+				break;
 
-		case ONETIME: // == 3
-			// for OTP, we need to generate a pad that will allow to encrypt the message
-			byte[] pad = generatePad(message.length);
-			cipher = oneTimePad(message, pad);
-			ciphered = Helper.bytesToString(cipher);
-			break;
+			case ONETIME: // == 3
+				// for OTP, we need to generate a pad that will allow to encrypt the message
+				byte[] pad = generatePad(message.length);
+				cipher = oneTimePad(message, pad);
+				ciphered = Helper.bytesToString(cipher);
+				break;
 
-		case CBC:// == 4
-			cipher = cbc(message, keyArray);
-			ciphered = Helper.bytesToString(cipher);
-			break;
+			case CBC:// == 4
+				cipher = cbc(message, keyArray);
+				ciphered = Helper.bytesToString(cipher);
+				break;
 
-		// no default statement needed as a while loop in Main.java already accounts for
-		// the fact that the user must input a number between 0 and 4
+			// no default statement needed as a while loop in Main.java already accounts for
+			// the fact that the user must input a number between 0 and 4
 		}
 		return ciphered;
 	}
@@ -106,8 +112,8 @@ public class Encrypt {
 
 		byte[] ciphered = new byte[plainText.length];
 		for (int i = 0; i < plainText.length; ++i) {
-			
-			//copying elements of plainText in ciphered to not interfere with reference
+
+			// copying elements of plainText in ciphered to not interfere with reference
 			ciphered[i] = plainText[i];
 
 			if (spaceEncoding == false) {
@@ -205,8 +211,7 @@ public class Encrypt {
 
 		return ciphered; // TODO: to be modified
 	}
-	
-	
+
 	/**
 	 * Method to encode a byte array using a byte array keyword The keyword is
 	 * repeated along the message to encode spaces are not encoded The bytes of the
@@ -225,8 +230,8 @@ public class Encrypt {
 
 	/**
 	 * Method to encode a byte array using a one time pad of the same length. The
-	 * method XOR them together. Spaces are by default encoded. 
-	 * The pad length must be equal or longer than the message. 
+	 * method XOR them together. Spaces are by default encoded. The pad length must
+	 * be equal or longer than the message.
 	 * 
 	 * @param plainText the byte array representing the string to encode
 	 * @param pad       the one time pad
@@ -234,7 +239,7 @@ public class Encrypt {
 	 */
 	public static byte[] oneTimePad(byte[] plainText, byte[] pad) {
 		assert (pad.length >= plainText.length);
-		
+
 		byte[] ciphered = new byte[plainText.length];
 		for (int i = 0; i < plainText.length; i++) {
 			ciphered[i] = (byte) (plainText[i] ^ pad[i]);
@@ -246,12 +251,11 @@ public class Encrypt {
 
 	/**
 	 * Method applying a basic chain block counter of XOR without encryption method.
-	 * Encodes spaces.
-	 * Important note : This method is not symetric ! 
+	 * Encodes spaces. Important note : This method is not symetric !
 	 * 
 	 * @param plainText the byte array representing the string to encode
 	 * @param iv        the pad of size BLOCKSIZE we use to start the chain encoding
-	 * @return 			an encoded byte array
+	 * @return an encoded byte array
 	 */
 	public static byte[] cbc(byte[] plainText, byte[] iv) {
 		return cbcInternal(plainText, iv, false);
@@ -259,41 +263,42 @@ public class Encrypt {
 
 	/**
 	 * Method applying a basic chain block counter of XOR without encryption method.
-	 * Can be used in both senses, ciphering or deciphering. 
-	 * Encodes spaces. 
+	 * Can be used in both senses, ciphering or deciphering. Encodes spaces.
 	 * 
 	 * @param plainText the byte array representing the string to encode
 	 * @param iv        the pad of size BLOCKSIZE we use to start the chain encoding
-	 * @param decipher 	Wether or not the cbc is in decipher mode. 
+	 * @param decipher  Wether or not the cbc is in decipher mode.
 	 * @return an encoded byte array
-	 */	
+	 */
 	public static byte[] cbcInternal(byte[] plainText, byte[] iv, boolean decipher) {
-		
+
 		byte[] ciphered = new byte[plainText.length];
-		// We copy it to avoid any reference related problem, as we will change its value. 
-		byte[] temp_pad = iv.clone(); 
-		int lengthBlock = iv.length;	
+		// We copy it to avoid any reference related problem, as we will change its
+		// value.
+		byte[] temp_pad = iv.clone();
+		int lengthBlock = iv.length;
 		byte[] blockCipheredTemp = new byte[lengthBlock];
-		int shift = lengthBlock; 
+		int shift = lengthBlock;
 		for (int indexBlock = 0; indexBlock < plainText.length; indexBlock += lengthBlock) {
-			// Arrays.copyOfRange fill up with zeros the array given as parameters, if the upper bound is greater than the size of the array. 
-			// As zero would be processed by the ciphers functions as a normal elements, we want to avoid this and reduce the size of t
-			// the array so there won't be any additional zero. 
+			// Arrays.copyOfRange fill up with zeros the array given as parameters, if the
+			// upper bound is greater than the size of the array.
+			// As zero would be processed by the ciphers functions as a normal elements, we
+			// want to avoid this and reduce the size of t
+			// the array so there won't be any additional zero.
 			if ((indexBlock + lengthBlock) > plainText.length) {
 				shift = plainText.length - indexBlock;
 			}
 			byte[] blockToCipher = Arrays.copyOfRange(plainText, indexBlock, indexBlock + shift);
-			
+
 			blockCipheredTemp = oneTimePad(blockToCipher, temp_pad);
-			// Initialize the pad for the next iteration. 
-			// Deciphering method is slightly method than ciphering. 
+			// Initialize the pad for the next iteration.
+			// Deciphering method is slightly method than ciphering.
 			if (decipher) {
 				temp_pad = blockToCipher;
-			}
-			else {
+			} else {
 				temp_pad = blockCipheredTemp.clone();
 			}
-			// This aims to add append every element of the block ciphered to ciphered. 
+			// This aims to add append every element of the block ciphered to ciphered.
 			for (int j = 0; j < shift; j++) {
 				int indexCiphered = indexBlock + j;
 				ciphered[indexCiphered] = blockCipheredTemp[j];
@@ -309,12 +314,13 @@ public class Encrypt {
 	 * @return random bytes in an array
 	 */
 	public static byte[] generatePad(int size) {
-		assert (size > 0); 
+		assert (size > 0);
 		byte[] result = new byte[size];
 		for (int i = 0; i < size; i++) {
-				result[i] = (byte) rand.nextInt(256); 
+			result[i] = (byte) rand.nextInt(256);
 		}
 		return result;
+
 	}
 
 }
