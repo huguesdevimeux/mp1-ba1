@@ -23,20 +23,22 @@ public class Main {
 	public static void main(String args[]) {
 
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
-	//	String inputMessage2 = Helper.readStringFromFile("text_two.txt");
-		
+		// String inputMessage2 = Helper.readStringFromFile("text_two.txt");
+
 		String key = "2cF%5";
 		String messageClean = cleanString(inputMessage);
-		
+
 		byte[] messageBytes = stringToBytes(messageClean);
 		byte[] keyBytes = stringToBytes(key);
 
 		System.out.println("Original input sanitized : " + messageClean);
 		System.out.println();
-		// method that will display the user's possibilities (ie: the .txt file, their sentence or our unit tests)
+		// method that will display the user's possibilities (ie: the .txt file, their
+		// sentence or our unit tests)
 		possibilities();
 
-		// asking the user to input either 0,1,2 to choose what message they want to test
+		// asking the user to input either 0,1,2 to choose what message they want to
+		// test
 		int testing = input.nextInt();
 		// the console will display an error message if the 0assertion is false
 		assert testing == 0 || testing == 1 || testing == 2;
@@ -54,39 +56,40 @@ public class Main {
 			}
 			// switch statement to evaluate the cases where we encrypt or decrypt
 			switch (encryptOrDecrypt) {
-			case 0:
-				//created 2 methods that we will use twice, to avoid redundant code
-				// created a method that will display all possible algorithms you can use to encrypt
-				whatEncryption();
-				int typeEncrypt = askUser(0, 4);
-				// method to ask user to select an algorithm to encrypt
-				//limited to 5 options as there are 5 algorithms possible
-				String ciphered = Encrypt.encrypt(messageClean, key, typeEncrypt);
-				System.out.println(ciphered);
-				break;
+				case 0:
+					// created 2 methods that we will use twice, to avoid redundant code
+					// created a method that will display all possible algorithms you can use to
+					// encrypt
+					whatEncryption();
+					int typeEncrypt = askUser(0, 4);
+					// method to ask user to select an algorithm to encrypt
+					// limited to 5 options as there are 5 algorithms possible
+					String ciphered = Encrypt.encrypt(messageClean, key, typeEncrypt);
+					System.out.println(ciphered);
+					break;
 
-			case 1:
-				System.out.println("Enter a number between 0 and 2. If you select \n"
-						+ "0 : the message will be decrypted using caesar with frequencies \n"
-						+ "1 : the message will be decrypted using vigenere frequencies \n"
-						+ "2 : the message will be decrypted using xor brute force \n");
+				case 1:
+					System.out.println("Enter a number between 0 and 2. If you select \n"
+							+ "0 : the message will be decrypted using caesar with frequencies \n"
+							+ "1 : the message will be decrypted using vigenere frequencies \n"
+							+ "2 : the message will be decrypted using xor brute force \n");
 
-				int typeDecrypt = input.nextInt();
-				while (typeDecrypt < 0 || typeDecrypt > 2) {
-					System.out.println("Please input a number between 0 and 2");
-					typeDecrypt = input.nextInt();
-				}
-				// printing the ciphered version choosing the algorithm chosen by the user
-				String cipher = Encrypt.encrypt(messageClean, key, typeDecrypt);
-				System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher
-						+ "\n "
-						+ "Now we Decrypt the encrypted message, seeing if we can find the original message again");
-				System.out.println();
-				// Because we are using brute force for XOR, you will need to manually look for
-				// the decrypted message
-				String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
-				System.out.println(deciphered);
-				break;
+					int typeDecrypt = input.nextInt();
+					while (typeDecrypt < 0 || typeDecrypt > 2) {
+						System.out.println("Please input a number between 0 and 2");
+						typeDecrypt = input.nextInt();
+					}
+					// printing the ciphered version choosing the algorithm chosen by the user
+					String cipher = Encrypt.encrypt(messageClean, key, typeDecrypt);
+					System.out.println("The message provided in main, encoded in the algorithm chosen is : \n" + cipher
+							+ "\n "
+							+ "Now we Decrypt the encrypted message, seeing if we can find the original message again");
+					System.out.println();
+					// Because we are using brute force for XOR, you will need to manually look for
+					// the decrypted message
+					String deciphered = Decrypt.breakCipher(cipher, typeDecrypt);
+					System.out.println(deciphered);
+					break;
 			}
 
 		} else if (testing == 1) {
@@ -103,13 +106,13 @@ public class Main {
 			int typeEncrypt = askUser(0, 4);
 			String myMessageCiphered = Encrypt.encrypt(myMessage, key, typeEncrypt);
 			System.out.println(myMessageCiphered + "\n");
-			
-			
-			System.out.println("Now do you want to decipher the encrypted message (using the same key and same algortihm) ?\n"
-					+ "input y for yes and n for no\n"
-					+ "Attention! Please input y ONLY if you have used Caesar, Xor or Vigenere to encrypt.\n"
-					+ "otherwise the console will display an assertion error\n"
-					+ "(These are the only algorithms that we can use to decrypt)");
+
+			System.out.println(
+					"Now do you want to decipher the encrypted message (using the same key and same algortihm) ?\n"
+							+ "input y for yes and n for no\n"
+							+ "Attention! Please input y ONLY if you have used Caesar, Xor or Vigenere to encrypt.\n"
+							+ "otherwise the console will display an assertion error\n"
+							+ "(These are the only algorithms that we can use to decrypt)");
 			input.nextLine();
 
 			String toDecrypt = input.nextLine();
@@ -117,16 +120,16 @@ public class Main {
 
 			switch (toDecrypt) {
 
-			case "y":
-				// we are using the message that was encrypted before with the same algorithm to
-				// decrpyt
-				assert (typeEncrypt <= 2 && typeEncrypt >= 0);
-				String decrypted = Decrypt.breakCipher(myMessageCiphered, typeEncrypt);
-				System.out.println("The decrypted message is \n" + decrypted);
-				break;
+				case "y":
+					// we are using the message that was encrypted before with the same algorithm to
+					// decrpyt
+					assert (typeEncrypt <= 2 && typeEncrypt >= 0);
+					String decrypted = Decrypt.breakCipher(myMessageCiphered, typeEncrypt);
+					System.out.println("The decrypted message is \n" + decrypted);
+					break;
 
-			case "n":
-				break;
+				case "n":
+					break;
 			}
 
 		} else if (testing == 2) {
@@ -161,15 +164,15 @@ public class Main {
 
 		byte[] encrypt2 = Encrypt.caesar(plainBytes, (byte) 3, true);
 		String cipherText1 = Helper.bytesToString(encrypt2);
-		// Test Caesar with spaces	
-    	assert (cipherText1.equals("erqqh#mrxuqìh"));
-		
+		// Test Caesar with spaces
+		assert (cipherText1.equals("erqqh#mrxuqìh"));
+
 		System.out.println("Caesar tested successfully.");
-		
+
 		byte[] encryptedMessage = Encrypt.caesar(string, key);
-		byte guessedKey = Decrypt.caesarWithFrequencies(encryptedMessage); 
-		assert (key == guessedKey); 
-		
+		byte guessedKey = Decrypt.caesarWithFrequencies(encryptedMessage);
+		assert (key == guessedKey);
+
 		// Testing caesarBruteForce with the following array
 		// this array corresponds to "i want" in bytes
 		// the following algorithm will create a .txt file and will contain 256
@@ -179,10 +182,10 @@ public class Main {
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(test);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
-	
+
 		System.out.println("Caesar Cryptanalysis tested successfully.");
 	}
-		
+
 	public static void testXor(byte[] textBytes, byte key) {
 		// Test symetry
 		byte[] result = Encrypt.xor(textBytes, key, true);
@@ -203,7 +206,8 @@ public class Main {
 		/*
 		 * Testing xorBruteForce with the following array the following array
 		 * corresponds to "bonne journée" in bytes the Helper method will create a .txt
-		 * file which will contain the 256 different arrays and you can manually look for "bonne journée"
+		 * file which will contain the 256 different arrays and you can manually look
+		 * for "bonne journée"
 		 */
 		byte[] test = { 98, 111, 110, 110, 101, 32, 106, 111, 117, 114, 110, -23, 101 };
 		byte[][] bruteForceResult = Decrypt.xorBruteForce(test);
@@ -244,7 +248,8 @@ public class Main {
 
 		// creating array of keys used in example
 		byte[] keys = { 1, 2, 3 };
-		// encrypting without encoding spaces(spaceEncoding (boolean parameter of vigenere) considered false)
+		// encrypting without encoding spaces(spaceEncoding (boolean parameter of
+		// vigenere) considered false)
 		byte[] cipherBytes1 = Encrypt.vigenere(plainBytes, keys, false);
 		String cipherText1 = Helper.bytesToString(cipherBytes1);
 		assert (cipherText1.equals("cqqog mpwuoëh"));
@@ -275,13 +280,14 @@ public class Main {
 	}
 
 	public static void testsUnitsVigenere() {
-		// This is weird way to so unit tests, but as we don't know yet how to do them properly, we'll stick to that.
-		// TODO : write a proper test for that. 
-		// int a = Decrypt.getNumberCoincidences(tested, 2); 
+		// This is weird way to so unit tests, but as we don't know yet how to do them
+		// properly, we'll stick to that.
+		// TODO : write a proper test for that.
+		// int a = Decrypt.getNumberCoincidences(tested, 2);
 		// assert (a == 1);
 		// a = Decrypt.getNumberCoincidences(tested, 1);
 		// assert (a == 0);
-		
+
 		// Test getShiftMaxima
 		int[] sorted = { 1, 2, 3, 4, 5 };
 		ArrayList<Integer> b = Decrypt.getShiftMaxima(sorted);
