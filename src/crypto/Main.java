@@ -99,7 +99,8 @@ public class Main {
 					+ "using caesar/vigenere with frequencies, which rely on probabilities");
 			input.nextLine();
 			String myMessage = input.nextLine();
-
+			myMessage = cleanString(myMessage);
+			
 			System.out.println("Now please input a key");
 			key = input.nextLine();
 			assert (key != null);
@@ -113,7 +114,7 @@ public class Main {
 							+ "Attention! Please input y ONLY if you have used Caesar, Xor or Vigenere to encrypt.\n"
 							+ "otherwise the console will display an assertion error\n"
 							+ "(These are the only algorithms that we can use to decrypt)\n"
-							+ "if you chose xor, you will obtain an array if you decide to decrypt");
+							+ "if you have chosen xor, you will obtain an array if you decide to decrypt");
 			input.nextLine();
 			String toDecrypt = input.nextLine();
 			assert (toDecrypt.equals("y") || toDecrypt.equals("n"));
@@ -130,7 +131,6 @@ public class Main {
 				case "n":
 					break;
 			}
-
 		} else if (testing == 2) {
 			System.out.println("------Caesar------");
 			testCaesar(messageBytes, keyBytes[0]);
@@ -184,8 +184,6 @@ public class Main {
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(test);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
-
-		System.out.println("Caesar Cryptanalysis tested successfully.");
 	}
 
 	public static void testXor(byte[] textBytes, byte key) {
@@ -277,7 +275,6 @@ public class Main {
 		}
 		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
 		assert (Arrays.equals(decryptedUnsingGuessedKey, string));
-		System.out.println("Vigenere decryption tested successfully");
 
 	}
 
@@ -309,7 +306,7 @@ public class Main {
 		c = Decrypt.getPartialArray(a, 1, 3);
 		assert Arrays.equals(c, new byte[] { 1, 4 });
 
-		System.out.println("Vigenere unit-tests passed");
+		System.out.println("Vigenere unit-tests passed.");
 	}
 
 	// method will simply display the different algorithms you can choose from - to
@@ -357,7 +354,8 @@ public class Main {
 						+ "then, you will choose which algorithm to use to encrypt/decrypt."
 						+ "if you choose to decrypt the .txt file, \nwe will first encrypt it using the algorithm chosen and "
 						+ "decrypt it back\n"
-						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption");
+						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption\n"
+						+ "as well as inputting a long enough message so the algorithms you can choose to decrypt will 'guess' the correct key");
 				break;
 			case "n":
 				System.exit(0);
