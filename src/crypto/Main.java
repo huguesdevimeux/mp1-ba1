@@ -98,8 +98,8 @@ public class Main {
 					+ "Please ensure you write a long enough message as we will then attempt to decrypt it\n"
 					+ "using caesar/vigenere with frequencies, which rely on probabilities");
 			input.nextLine();
-			String myMessage = input.nextLine();
-
+			String myMessage = cleanString(input.nextLine());
+			
 			System.out.println("Now please input a key");
 			key = input.nextLine();
 			assert (key != null);
@@ -113,7 +113,7 @@ public class Main {
 							+ "Attention! Please input y ONLY if you have used Caesar, Xor or Vigenere to encrypt.\n"
 							+ "otherwise the console will display an assertion error\n"
 							+ "(These are the only algorithms that we can use to decrypt)\n"
-							+ "if you chose xor, you will obtain an array if you decide to decrypt");
+							+ "if you have chosen xor, you will obtain an array if you decide to decrypt");
 			input.nextLine();
 			String toDecrypt = input.nextLine();
 			assert (toDecrypt.equals("y") || toDecrypt.equals("n"));
@@ -184,8 +184,6 @@ public class Main {
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(test);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
-
-		System.out.println("Caesar Cryptanalysis tested successfully.");
 	}
 
 	public static void testXor(byte[] textBytes, byte key) {
@@ -264,9 +262,7 @@ public class Main {
 		byte[] cipherBytes2 = Encrypt.vigenere(plainBytes, keys, true);
 		String cipherText2 = Helper.bytesToString(cipherBytes2);
 		assert (cipherText2.equals("cqqog#kqxspìf"));
-
-		System.out.println("Vigenere encryption tested successfully.");
-
+		
 		// Key length finder
 		byte[] ciphered = Encrypt.vigenere(string, key);
 		// NOTE removeSpaces is unit tested below.
@@ -281,8 +277,8 @@ public class Main {
 		}
 		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
 		assert (Arrays.equals(decryptedUnsingGuessedKey, string));
-		System.out.println("Vigenere decryption tested successfully");
-
+		
+		System.out.println("Vigenere tested successfully.");
 	}
 
 	public static void testsUnitsVigenere() {
@@ -312,7 +308,7 @@ public class Main {
 		float[] res = Decrypt.computeFrequencies(d);
 		assert (res[1 + 128] == 0.5);  
 
-		System.out.println("Vigenere unit-tests passed");
+		System.out.println("Vigenere unit-tests passed.");
 	}
 
 	// method will simply display the different algorithms you can choose from - to
@@ -334,7 +330,6 @@ public class Main {
 		}
 		return response;
 	}
-
 	// method will ask what the user wants to encrypt or decrypt
 	public static void possibilities() {
 		System.out.println("Do you want to test encryption or decryption \n"
@@ -342,7 +337,6 @@ public class Main {
 				+ "0 in the console if you want to encrypt or decrypt the long message \n"
 				+ "1 if you want to encrypt your own message \n" + "2 if you want to test our examples\n");
 	}
-
 	// method that will be called when the program is over to ask whether the user
 	// needs additional information
 	public static void help() {
