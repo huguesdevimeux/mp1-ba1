@@ -21,7 +21,10 @@ public class Main {
 	public static final Scanner input = new Scanner(System.in);
 
 	public static void main(String args[]) {
-
+		//method that will ask whether user needs additional/further information
+		askHelp();
+		System.out.println();
+		
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
 		// String inputMessage2 = Helper.readStringFromFile("text_two.txt");
 
@@ -150,9 +153,6 @@ public class Main {
 			System.out.println("------UNIT TESTS-------");
 			testsUnitsVigenere();
 		}
-		System.out.println();
-		// method that will ask if the user needs any help with further information
-		help();
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern
@@ -339,9 +339,8 @@ public class Main {
 
 	// method that will be called when the program is over to ask whether the user
 	// needs additional information
-	public static void help() {
-		System.out.println("Do you require further information or help understanding the program [y/n]");
-		input.nextLine();
+	public static void askHelp() {
+		System.out.println("Do you require indicative information or help understanding the program [y/n]");
 		String a = input.nextLine();
 		switch (a) {
 			case "y":
@@ -358,7 +357,6 @@ public class Main {
 						+ "as well as inputting a long enough message so the algorithms you can choose to decrypt will 'guess' the correct key");
 				break;
 			case "n":
-				System.exit(0);
 				break;
 		}
 	}
