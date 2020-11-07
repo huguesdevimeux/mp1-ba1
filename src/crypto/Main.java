@@ -21,7 +21,10 @@ public class Main {
 	public static final Scanner input = new Scanner(System.in);
 
 	public static void main(String args[]) {
-
+		//method that will ask whether user needs additional/further information
+		askHelp();
+		System.out.println();
+		
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
 		// String inputMessage2 = Helper.readStringFromFile("text_two.txt");
 
@@ -98,7 +101,8 @@ public class Main {
 					+ "Please ensure you write a long enough message as we will then attempt to decrypt it\n"
 					+ "using caesar/vigenere with frequencies, which rely on probabilities");
 			input.nextLine();
-			String myMessage = cleanString(input.nextLine());
+			String myMessage = input.nextLine();
+			myMessage = cleanString(myMessage);
 			
 			System.out.println("Now please input a key");
 			key = input.nextLine();
@@ -130,7 +134,6 @@ public class Main {
 				case "n":
 					break;
 			}
-
 		} else if (testing == 2) {
 			System.out.println("------Caesar------");
 			testCaesar(messageBytes, keyBytes[0]);
@@ -150,9 +153,6 @@ public class Main {
 			System.out.println("------UNIT TESTS-------");
 			testsUnitsVigenere();
 		}
-		System.out.println();
-		// method that will ask if the user needs any help with further information
-		help();
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern
@@ -276,8 +276,7 @@ public class Main {
 			assert -guessedDecryptKey[i] == key[i];
 		}
 		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
-		assert (Arrays.equals(decryptedUnsingGuessedKey, string));
-		
+		assert (Arrays.equals(decryptedUnsingGuessedKey, string));		
 		System.out.println("Vigenere tested successfully.");
 	}
 
@@ -339,9 +338,8 @@ public class Main {
 	}
 	// method that will be called when the program is over to ask whether the user
 	// needs additional information
-	public static void help() {
-		System.out.println("Do you require further information or help understanding the program [y/n]");
-		input.nextLine();
+	public static void askHelp() {
+		System.out.println("Do you require indicative information or help understanding the program [y/n]");
 		String a = input.nextLine();
 		switch (a) {
 			case "y":
@@ -354,10 +352,10 @@ public class Main {
 						+ "then, you will choose which algorithm to use to encrypt/decrypt."
 						+ "if you choose to decrypt the .txt file, \nwe will first encrypt it using the algorithm chosen and "
 						+ "decrypt it back\n"
-						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption");
+						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption\n"
+						+ "as well as inputting a long enough message so the algorithms you can choose to decrypt will 'guess' the correct key");
 				break;
 			case "n":
-				System.exit(0);
 				break;
 		}
 	}
