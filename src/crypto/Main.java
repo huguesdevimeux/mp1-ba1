@@ -21,7 +21,10 @@ public class Main {
 	public static final Scanner input = new Scanner(System.in);
 
 	public static void main(String args[]) {
-
+		//method that will ask whether user needs additional/further information
+		askHelp();
+		System.out.println();
+		
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
 		// String inputMessage2 = Helper.readStringFromFile("text_two.txt");
 
@@ -99,7 +102,8 @@ public class Main {
 					+ "using caesar/vigenere with frequencies, which rely on probabilities");
 			input.nextLine();
 			String myMessage = input.nextLine();
-
+			myMessage = cleanString(myMessage);
+			
 			System.out.println("Now please input a key");
 			key = input.nextLine();
 			assert (key != null);
@@ -113,7 +117,7 @@ public class Main {
 							+ "Attention! Please input y ONLY if you have used Caesar, Xor or Vigenere to encrypt.\n"
 							+ "otherwise the console will display an assertion error\n"
 							+ "(These are the only algorithms that we can use to decrypt)\n"
-							+ "if you chose xor, you will obtain an array if you decide to decrypt");
+							+ "if you have chosen xor, you will obtain an array if you decide to decrypt");
 			input.nextLine();
 			String toDecrypt = input.nextLine();
 			assert (toDecrypt.equals("y") || toDecrypt.equals("n"));
@@ -130,7 +134,6 @@ public class Main {
 				case "n":
 					break;
 			}
-
 		} else if (testing == 2) {
 			System.out.println("------Caesar------");
 			testCaesar(messageBytes, keyBytes[0]);
@@ -142,7 +145,7 @@ public class Main {
 			testXor(messageBytes, keyBytes[0]);
 
 			System.out.println("------OTP-------");
-			testOTP(); // TODO : make it input dependent !
+			testOTP(messageBytes, keyBytes); 
 
 			System.out.println("------CBC-------");
 			testCBC(messageBytes, keyBytes);
@@ -150,9 +153,6 @@ public class Main {
 			System.out.println("------UNIT TESTS-------");
 			testsUnitsVigenere();
 		}
-		System.out.println();
-		// method that will ask if the user needs any help with further information
-		help();
 	}
 
 	// Run the Encoding and Decoding using the caesar pattern
@@ -184,8 +184,6 @@ public class Main {
 		byte[][] bruteForceResult = Decrypt.caesarBruteForce(test);
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceCaesar.txt");
-
-		System.out.println("Caesar Cryptanalysis tested successfully.");
 	}
 
 	public static void testXor(byte[] textBytes, byte key) {
@@ -219,7 +217,7 @@ public class Main {
 		System.out.println("XOR encryption tested successfully.");
 	}
 
-	public static void testOTP() {
+	public static void testOTP(byte[] string, byte[] key) {
 		byte[] pad = stringToBytes("allonsenfants");
 		byte[] message = stringToBytes("helloworld");
 
@@ -228,18 +226,22 @@ public class Main {
 		byte[] cipheredBack = Encrypt.oneTimePad(ciphered, pad);
 		assert Arrays.equals(message, cipheredBack);
 
-		// TODO implement other tests
+		// test symetry with user-dep input
+		byte[] pad2 = Encrypt.generatePad(string.length);
+		assert pad2.length == string.length; 
+		byte[] ciphered2 = Encrypt.oneTimePad(string, pad2);
+		byte[] cipheredBack2 = Encrypt.oneTimePad(ciphered2, pad2);
+		assert Arrays.equals(string, cipheredBack2);
+
 		System.out.println("OTP encryption tested successfully.");
 	}
 
 	public static void testCBC(byte[] textBytes, byte[] pad) {
 		byte[] resultTemp = Encrypt.cbc(textBytes, pad);
 		resultTemp = Decrypt.decryptCBC(resultTemp, pad);
-
 		// Test symetry
 		assert (Arrays.equals(textBytes, resultTemp));
 		System.out.println("CBC encryption tested successfully.");
-		// TODO Implement good tests for this ?
 	}
 
 	public static void testVigenere(byte[] string, byte[] key) {
@@ -260,9 +262,7 @@ public class Main {
 		byte[] cipherBytes2 = Encrypt.vigenere(plainBytes, keys, true);
 		String cipherText2 = Helper.bytesToString(cipherBytes2);
 		assert (cipherText2.equals("cqqog#kqxspìf"));
-
-		System.out.println("Vigenere encryption tested successfully.");
-
+		
 		// Key length finder
 		byte[] ciphered = Encrypt.vigenere(string, key);
 		// NOTE removeSpaces is unit tested below.
@@ -284,11 +284,6 @@ public class Main {
 	public static void testsUnitsVigenere() {
 		// This is weird way to so unit tests, but as we don't know yet how to do them
 		// properly, we'll stick to that.
-		// TODO : write a proper test for that.
-		// int a = Decrypt.getNumberCoincidences(tested, 2);
-		// assert (a == 1);
-		// a = Decrypt.getNumberCoincidences(tested, 1);
-		// assert (a == 0);
 
 		// Test getShiftMaxima
 		int[] sorted = { 1, 2, 3, 4, 5 };
@@ -308,8 +303,12 @@ public class Main {
 		assert Arrays.equals(c, new byte[] { 0, 3, 6 });
 		c = Decrypt.getPartialArray(a, 1, 3);
 		assert Arrays.equals(c, new byte[] { 1, 4 });
+		
+		byte[] d = {(byte) 1, (byte) 2}; 
+		float[] res = Decrypt.computeFrequencies(d);
+		assert (res[1 + 128] == 0.5);  
 
-		System.out.println("Vigenere unit-tests passed");
+		System.out.println("Vigenere unit-tests passed.");
 	}
 
 	// method will simply display the different algorithms you can choose from - to
@@ -331,7 +330,6 @@ public class Main {
 		}
 		return response;
 	}
-
 	// method will ask what the user wants to encrypt or decrypt
 	public static void possibilities() {
 		System.out.println("Do you want to test encryption or decryption \n"
@@ -339,12 +337,10 @@ public class Main {
 				+ "0 in the console if you want to encrypt or decrypt the long message \n"
 				+ "1 if you want to encrypt your own message \n" + "2 if you want to test our examples\n");
 	}
-
 	// method that will be called when the program is over to ask whether the user
 	// needs additional information
-	public static void help() {
-		System.out.println("Do you require further information or help understanding the program [y/n]");
-		input.nextLine();
+	public static void askHelp() {
+		System.out.println("Do you require indicative information or help understanding the program [y/n]");
 		String a = input.nextLine();
 		switch (a) {
 			case "y":
@@ -357,10 +353,10 @@ public class Main {
 						+ "then, you will choose which algorithm to use to encrypt/decrypt."
 						+ "if you choose to decrypt the .txt file, \nwe will first encrypt it using the algorithm chosen and "
 						+ "decrypt it back\n"
-						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption");
+						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption\n"
+						+ "as well as inputting a long enough message so the algorithms you can choose to decrypt will 'guess' the correct key");
 				break;
 			case "n":
-				System.exit(0);
 				break;
 		}
 	}

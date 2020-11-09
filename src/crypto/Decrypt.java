@@ -136,12 +136,11 @@ public class Decrypt {
 	 * @return the character frequencies as an array of float
 	 */
 	public static float[] computeFrequencies(byte[] cipherText) {
-		// TODO Unit TEST !
 		float[] frequencies = new float[ALPHABETSIZE];
 		int numberCharNotSpace = 0;
 		for (byte charTemp : cipherText) {
 
-			// We have to skip the spaces, which does not make any sen .. well, we have to
+			// We have to skip the spaces, which does not make any sen .. well, we have to I guess 
 			if (charTemp != 32) {
 				numberCharNotSpace += 1;
 				// The index is charTemp shifted by 126, as index are only positives integrers

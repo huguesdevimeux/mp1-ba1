@@ -152,8 +152,7 @@ public class Encrypt {
 	 * @return an encoded byte array
 	 */
 	public static byte[] xor(byte[] plainText, byte key, boolean spaceEncoding) {
-		assert plainText.length > 0;
-		// TODO ; Implement check for empty key ?
+		assert plainText.length > 0 : "Text is empty!";
 		byte[] ciphered = new byte[plainText.length];
 		for (int i = 0; i < plainText.length; i++) {
 			if (!(spaceEncoding) && plainText[i] == SPACE) {
@@ -209,7 +208,7 @@ public class Encrypt {
 			}
 		}
 
-		return ciphered; // TODO: to be modified
+		return ciphered;
 	}
 
 	/**
