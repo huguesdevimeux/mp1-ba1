@@ -151,7 +151,7 @@ public class Encrypt {
 	 */
 	public static byte[] xor(byte[] plainText, byte key, boolean spaceEncoding) {
 		assert plainText.length > 0;
-		// TODO ; Implement check for empty key ?
+		
 		byte[] ciphered = new byte[plainText.length];
 		for (int i = 0; i < plainText.length; i++) {
 			if (!(spaceEncoding) && plainText[i] == SPACE) {

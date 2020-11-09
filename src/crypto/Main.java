@@ -146,7 +146,7 @@ public class Main {
 			testXor(messageBytes, keyBytes[0]);
 
 			System.out.println("------OTP-------");
-			testOTP(); // TODO : make it input dependent !
+			testOTP();
 
 			System.out.println("------CBC-------");
 			testCBC(messageBytes, keyBytes);
@@ -227,7 +227,6 @@ public class Main {
 		byte[] cipheredBack = Encrypt.oneTimePad(ciphered, pad);
 		assert Arrays.equals(message, cipheredBack);
 
-		// TODO implement other tests
 		System.out.println("OTP tested successfully.");
 	}
 
@@ -238,7 +237,6 @@ public class Main {
 		// Test symetry
 		assert (Arrays.equals(textBytes, resultTemp));
 		System.out.println("CBC tested successfully.");
-		// TODO Implement good tests for this ?
 	}
 
 	public static void testVigenere(byte[] string, byte[] key) {
@@ -260,7 +258,7 @@ public class Main {
 		String cipherText2 = Helper.bytesToString(cipherBytes2);
 		assert (cipherText2.equals("cqqog#kqxspìf"));
 
-		System.out.println("Vigenere encryption tested successfully.");
+		System.out.println("Vigenere tested successfully.");
 
 		// Key length finder
 		byte[] ciphered = Encrypt.vigenere(string, key);
@@ -281,12 +279,6 @@ public class Main {
 	public static void testsUnitsVigenere() {
 		// This is weird way to so unit tests, but as we don't know yet how to do them
 		// properly, we'll stick to that.
-		// TODO : write a proper test for that.
-		// int a = Decrypt.getNumberCoincidences(tested, 2);
-		// assert (a == 1);
-		// a = Decrypt.getNumberCoincidences(tested, 1);
-		// assert (a == 0);
-
 		// Test getShiftMaxima
 		int[] sorted = { 1, 2, 3, 4, 5 };
 		ArrayList<Integer> b = Decrypt.getShiftMaxima(sorted);
