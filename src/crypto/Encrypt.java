@@ -59,7 +59,6 @@ public class Encrypt {
 		switch (type) {
 
 			case CAESAR: // == 0
-
 				// we are not encoding spaces
 				// so we do not have to input a third paramater which is a boolean for
 				// spaceEncoding
@@ -123,7 +122,6 @@ public class Encrypt {
 				}
 			} else {
 				ciphered[i] += (byte) key;
-
 			}
 		}
 		return ciphered;
@@ -163,7 +161,6 @@ public class Encrypt {
 			}
 		}
 		return ciphered;
-
 	}
 
 	/**
@@ -194,13 +191,11 @@ public class Encrypt {
 		assert (keyword.length > 0 && keyword.length <= plainText.length);
 
 		byte[] ciphered = new byte[plainText.length];
-
 		// setting the variable below to allow for elements of
 		// plainText array to go back to the beginning of keyword array
 		int keywordArray_index = 0;
 
 		for (int i = 0; i < plainText.length; ++i) {
-
 			if (!spaceEncoding && plainText[i] == SPACE) {
 				ciphered[i] = plainText[i];
 			} else {
@@ -209,7 +204,7 @@ public class Encrypt {
 			}
 		}
 
-		return ciphered; // TODO: to be modified
+		return ciphered; 
 	}
 
 	/**
@@ -227,7 +222,6 @@ public class Encrypt {
 	}
 
 	// -----------------------One Time Pad-------------------------
-
 	/**
 	 * Method to encode a byte array using a one time pad of the same length. The
 	 * method XOR them together. Spaces are by default encoded. The pad length must
@@ -267,7 +261,7 @@ public class Encrypt {
 	 * 
 	 * @param plainText the byte array representing the string to encode
 	 * @param iv        the pad of size BLOCKSIZE we use to start the chain encoding
-	 * @param decipher  Wether or not the cbc is in decipher mode.
+	 * @param decipher  Whether or not the cbc is in decipher mode.
 	 * @return an encoded byte array
 	 */
 	public static byte[] cbcInternal(byte[] plainText, byte[] iv, boolean decipher) {
@@ -320,7 +314,5 @@ public class Encrypt {
 			result[i] = (byte) rand.nextInt(256);
 		}
 		return result;
-
 	}
-
 }

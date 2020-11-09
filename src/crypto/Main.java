@@ -48,8 +48,8 @@ public class Main {
 
 		if (testing == 0) {
 			// the user will decide whether to encrypt or decrypt to message above
-			System.out.println(
-					"Now enter 0 if you want to encrypt the message above or 1 if you want to decrypt a message");
+			System.out.println("Now enter 0 if you want to encrypt the message above\n"
+					+ "or 1 if you want to encrypt then decrypt the message");
 			int encryptOrDecrypt = input.nextInt();
 			// this variable must be either 0 or 1 as there are only 2 possibilities
 			// the while loop checks if the user has put a number other than 0 or 1
@@ -96,7 +96,6 @@ public class Main {
 
 		} else if (testing == 1) {
 			// user inputs their own message
-
 			System.out.println("Please input your message\n"
 					+ "Please ensure you write a long enough message as we will then attempt to decrypt it\n"
 					+ "using caesar/vigenere with frequencies, which rely on probabilities");
@@ -115,9 +114,7 @@ public class Main {
 			System.out.println(
 					"Now do you want to decipher the encrypted message (using the same key and same algortihm) [y/n] ?\n"
 							+ "Attention! Please input y ONLY if you have used Caesar, Xor or Vigenere to encrypt.\n"
-							+ "otherwise the console will display an assertion error\n"
-							+ "(These are the only algorithms that we can use to decrypt)\n"
-							+ "if you have chosen xor, you will obtain an array if you decide to decrypt");
+							+ "(These are the only algorithms that we can use to decrypt)\n");
 			input.nextLine();
 			String toDecrypt = input.nextLine();
 			assert (toDecrypt.equals("y") || toDecrypt.equals("n"));
@@ -125,8 +122,12 @@ public class Main {
 			switch (toDecrypt) {
 				case "y":
 					// we are using the message that was encrypted before with the same algorithm to
-					// decrpyt
-					assert (typeEncrypt <= 2 && typeEncrypt >= 0);
+					// decrypt
+					if (typeEncrypt > 2) {
+						System.out.println("You cannot decrypt the message as the algorithm selected to encrypt\n"
+								+ "was not designed to decrypt a message.");
+						break;
+					}
 					String decrypted = Decrypt.breakCipher(myMessageCiphered, typeEncrypt);
 					System.out.println("The decrypted message is \n" + decrypted);
 					break;
@@ -275,7 +276,6 @@ public class Main {
 		}
 		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
 		assert (Arrays.equals(decryptedUnsingGuessedKey, string));
-
 	}
 
 	public static void testsUnitsVigenere() {
@@ -340,7 +340,7 @@ public class Main {
 	// method that will be called when the program is over to ask whether the user
 	// needs additional information
 	public static void askHelp() {
-		System.out.println("Do you require indicative information or help understanding the program [y/n]");
+		System.out.println("Do you require indicative information or help understanding the program [y/n]?");
 		String a = input.nextLine();
 		switch (a) {
 			case "y":
