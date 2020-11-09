@@ -244,7 +244,7 @@ public class Main {
 
 	public static void testVigenere(byte[] string, byte[] key) {
 
-		byte[] result = Encrypt.vigenere(string, key);
+		byte[] stringCiphered = Encrypt.vigenere(string, key);
 		String plainText = "bonne journée";
 		byte[] plainBytes = plainText.getBytes(StandardCharsets.ISO_8859_1);
 
@@ -270,12 +270,12 @@ public class Main {
 		int a = Decrypt.vigenereFindKeyLength(messageBytes2);
 		assert (a == key.length);
 
-		byte[] guessedDecryptKey = Decrypt.vigenereWithFrequencies(result);
+		byte[] guessedDecryptKey = Decrypt.vigenereFindKey(messageBytes2, a);
 		assert (guessedDecryptKey.length == key.length);
 		for (int i = 0; i < guessedDecryptKey.length; i++) {
 			assert -guessedDecryptKey[i] == key[i];
 		}
-		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
+		byte[] decryptedUnsingGuessedKey = Decrypt.vigenereWithFrequencies(stringCiphered);
 		assert (Arrays.equals(decryptedUnsingGuessedKey, string));
 		System.out.println("Vigenere decryption tested successfully");
 

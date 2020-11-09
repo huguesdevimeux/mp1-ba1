@@ -53,8 +53,7 @@ public class Decrypt {
 			case Encrypt.VIGENERE:
 				// vigenereWithFrequencies will return a "guessed" array for the key
 				// which we will use to decrypt a message
-				byte[] guessedArray = vigenereWithFrequencies(message);
-				byte[] deciphering = Encrypt.vigenere(message, guessedArray);
+				byte[] deciphering = vigenereWithFrequencies(message);
 				deciphered = Helper.bytesToString(deciphering);
 				break;
 
@@ -223,12 +222,13 @@ public class Decrypt {
 	 * a clever way, saving up on large amounts of computations
 	 * 
 	 * @param cipher the byte array representing the encoded text
-	 * @return the byte encoding of the clear text
+	 * @return the byte encoding of the clear text (so, NOT THE KEY)P
 	 */
 	public static byte[] vigenereWithFrequencies(byte[] cipher) {
 		List<Byte> cipherClean = Decrypt.removeSpaces(cipher);
 		int keyLength = Decrypt.vigenereFindKeyLength(cipherClean);
-		return Decrypt.vigenereFindKey(cipherClean, keyLength);
+		byte[] guessedKey = Decrypt.vigenereFindKey(cipherClean, keyLength);
+		return Encrypt.vigenere(cipher, guessedKey); 
 	}
 
 	/**
