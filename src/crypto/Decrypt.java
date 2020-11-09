@@ -42,7 +42,7 @@ public class Decrypt {
 			// XOR = 2
 
 			case Encrypt.CAESAR:
-				// the function caesarWithFrequencies will return a "guessed" key
+				// the function caesarWithFrequencies will return a "guessed" key 
 				// we will use it to decrypt the message
 				byte guessedKey = caesarWithFrequencies(message);
 				// To decrypt caesar, we apply caesar using the inverse key
@@ -81,7 +81,6 @@ public class Decrypt {
 		// decoded will be the string of every array in the 2D array
 		// result will combine every "decoded" array
 		String result = "";
-
 		for (int i = 0; i < bruteForceResult.length; ++i) {
 			result += Helper.bytesToString(bruteForceResult[i]) + System.lineSeparator();
 		}
