@@ -145,7 +145,7 @@ public class Main {
 			testXor(messageBytes, keyBytes[0]);
 
 			System.out.println("------OTP-------");
-			testOTP(); // TODO : make it input dependent !
+			testOTP(messageBytes, keyBytes); 
 
 			System.out.println("------CBC-------");
 			testCBC(messageBytes, keyBytes);
@@ -214,10 +214,10 @@ public class Main {
 		String sDA = Decrypt.arrayToString(bruteForceResult);
 		Helper.writeStringToFile(sDA, "bruteForceXor.txt");
 
-		System.out.println("XOR tested successfully.");
+		System.out.println("XOR encryption tested successfully.");
 	}
 
-	public static void testOTP() {
+	public static void testOTP(byte[] string, byte[] key) {
 		byte[] pad = stringToBytes("allonsenfants");
 		byte[] message = stringToBytes("helloworld");
 
@@ -226,18 +226,22 @@ public class Main {
 		byte[] cipheredBack = Encrypt.oneTimePad(ciphered, pad);
 		assert Arrays.equals(message, cipheredBack);
 
-		// TODO implement other tests
-		System.out.println("OTP tested successfully.");
+		// test symetry with user-dep input
+		byte[] pad2 = Encrypt.generatePad(string.length);
+		assert pad2.length == string.length; 
+		byte[] ciphered2 = Encrypt.oneTimePad(string, pad2);
+		byte[] cipheredBack2 = Encrypt.oneTimePad(ciphered2, pad2);
+		assert Arrays.equals(string, cipheredBack2);
+
+		System.out.println("OTP encryption tested successfully.");
 	}
 
 	public static void testCBC(byte[] textBytes, byte[] pad) {
 		byte[] resultTemp = Encrypt.cbc(textBytes, pad);
 		resultTemp = Decrypt.decryptCBC(resultTemp, pad);
-
 		// Test symetry
 		assert (Arrays.equals(textBytes, resultTemp));
-		System.out.println("CBC tested successfully.");
-		// TODO Implement good tests for this ?
+		System.out.println("CBC encryption tested successfully.");
 	}
 
 	public static void testVigenere(byte[] string, byte[] key) {
@@ -258,9 +262,7 @@ public class Main {
 		byte[] cipherBytes2 = Encrypt.vigenere(plainBytes, keys, true);
 		String cipherText2 = Helper.bytesToString(cipherBytes2);
 		assert (cipherText2.equals("cqqog#kqxspìf"));
-
-		System.out.println("Vigenere encryption tested successfully.");
-
+		
 		// Key length finder
 		byte[] ciphered = Encrypt.vigenere(string, key);
 		// NOTE removeSpaces is unit tested below.
@@ -274,18 +276,13 @@ public class Main {
 			assert -guessedDecryptKey[i] == key[i];
 		}
 		byte[] decryptedUnsingGuessedKey = Encrypt.vigenere(result, guessedDecryptKey, false);
-		assert (Arrays.equals(decryptedUnsingGuessedKey, string));
-
+		assert (Arrays.equals(decryptedUnsingGuessedKey, string));		
+		System.out.println("Vigenere tested successfully.");
 	}
 
 	public static void testsUnitsVigenere() {
 		// This is weird way to so unit tests, but as we don't know yet how to do them
 		// properly, we'll stick to that.
-		// TODO : write a proper test for that.
-		// int a = Decrypt.getNumberCoincidences(tested, 2);
-		// assert (a == 1);
-		// a = Decrypt.getNumberCoincidences(tested, 1);
-		// assert (a == 0);
 
 		// Test getShiftMaxima
 		int[] sorted = { 1, 2, 3, 4, 5 };
@@ -305,6 +302,10 @@ public class Main {
 		assert Arrays.equals(c, new byte[] { 0, 3, 6 });
 		c = Decrypt.getPartialArray(a, 1, 3);
 		assert Arrays.equals(c, new byte[] { 1, 4 });
+		
+		byte[] d = {(byte) 1, (byte) 2}; 
+		float[] res = Decrypt.computeFrequencies(d);
+		assert (res[1 + 128] == 0.5);  
 
 		System.out.println("Vigenere unit-tests passed.");
 	}
@@ -328,7 +329,6 @@ public class Main {
 		}
 		return response;
 	}
-
 	// method will ask what the user wants to encrypt or decrypt
 	public static void possibilities() {
 		System.out.println("Do you want to test encryption or decryption \n"
@@ -336,7 +336,6 @@ public class Main {
 				+ "0 in the console if you want to encrypt or decrypt the long message \n"
 				+ "1 if you want to encrypt your own message \n" + "2 if you want to test our examples\n");
 	}
-
 	// method that will be called when the program is over to ask whether the user
 	// needs additional information
 	public static void askHelp() {
