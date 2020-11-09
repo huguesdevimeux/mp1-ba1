@@ -26,8 +26,7 @@ public class Main {
 		System.out.println();
 		
 		String inputMessage = Helper.readStringFromFile("text_one.txt");
-		// String inputMessage2 = Helper.readStringFromFile("text_two.txt");
-
+		
 		String key = "2cF%5";
 		String messageClean = cleanString(inputMessage);
 
@@ -345,12 +344,12 @@ public class Main {
 			case "y":
 				System.out.println("Firstly, the program will display all your options:\n"
 						+ "You can select the sentence provided in res: text_one.txt, or your own sentence, or our unit tests\n"
-						+ "you will need to input either 0, 1 or 2 to choose what you want to encrypt/decrypt\n(be careful, "
+						+ "input either 0, 1 or 2 to choose what you want to encrypt/decrypt\n(be careful, "
 						+ "inputting anything else will result in an assertion error)\n"
-						+ "you will then be asked to choose whether you want to encrypt or decrypt the message you've chosen just before\n"
-						+ "0 to encrypt and 1 to decrypt, any other number or string will not work and will result in error\n"
+						+ "afterwards, choose whether you want to encrypt or decrypt the message you've chosen just before\n"
+						+ "0 to encrypt and 1 to decrypt\nany other number or string will not work and will result in error\n"
 						+ "then, you will choose which algorithm to use to encrypt/decrypt."
-						+ "if you choose to decrypt the .txt file, \nwe will first encrypt it using the algorithm chosen and "
+						+ "if you choose to decrypt the .txt file, \nthe program will first encrypt it using the algorithm chosen and "
 						+ "decrypt it back\n"
 						+ "if you choose to decrypt your own message, you will be asked to type in a key for encryption\n"
 						+ "as well as inputting a long enough message so the algorithms you can choose to decrypt will 'guess' the correct key");

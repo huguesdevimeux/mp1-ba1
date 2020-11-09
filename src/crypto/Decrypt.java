@@ -353,7 +353,7 @@ public class Decrypt {
 	 * arrayToSlice = [1, 2, 3, 4, 5, 6, 7], start = 1, shift = 3, Returns [2, 5].
 	 * 
 	 * @param index
-en	 * @return
+	 * @return
 	 */
 	public static byte[] getPartialArray(List<Byte> arrayToSlice, int start, int shift) {
 		assert ((start >= 0) && (start < arrayToSlice.size()));
