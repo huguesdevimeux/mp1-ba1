@@ -13,7 +13,7 @@ import java.util.Scanner;
  * Part 1: Encode (with note that one can reuse the functions to decode)
  * Part 2: bruteForceDecode (caesar, xor) and CBCDecode
  * Part 3: frequency analysis and key-length search
- * Bonus: CBC with encryption, shell
+ * Bonus: shell
  */
 public class Main {
 
