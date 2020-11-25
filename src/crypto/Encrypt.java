@@ -16,6 +16,8 @@ public class Encrypt {
 	final static Random rand = new Random();
 
 	// -----------------------General-------------------------
+	
+	//ziz
 
 	/**
 	 * General method to encode a message using a key, you can choose the method you
